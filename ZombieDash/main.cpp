@@ -25,13 +25,14 @@ bool is_directory(string path)
   // e.g., "Z:/CS32/ZombieDash/Assets" or "/Users/fred/cs32/ZombieDash/Assets"
 
 const string assetDirectory = "Assets"; 
-
+//C:\Users\aliyu\Desktop\ZombieDash\ZombieDash\Assets
+//\\Desktop\\ZombieDash\\ZombieDash\\Assets
 class GameWorld;
 
 GameWorld* createStudentWorld(string assetPath = "");
 
 int main(int argc, char* argv[])
-{
+{	
     string assetPath = assetDirectory;
     if (!assetPath.empty())
     {
@@ -52,7 +53,10 @@ int main(int argc, char* argv[])
             return 1;
         }
     }
-
-    GameWorld* gw = createStudentWorld(assetPath);
-    Game().run(argc, argv, gw, "Zombie Dash");
+	cout << assetPath;
+	
+   GameWorld* gw = createStudentWorld(assetPath);
+   cout << assetPath << "after" << endl;
+   Game().run(argc, argv, gw, "Zombie Dash");
+   cout << "end" << endl;
 }

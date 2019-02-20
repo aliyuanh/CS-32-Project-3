@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="ZombieDash"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="msvc8"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="C:/Users/aliyu/Desktop/ZombieDash/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\aliyu\Desktop\ZombieDash\cmake-build-debug\Makefile VERBOSE=1 all"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\aliyu\Desktop\ZombieDash\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\aliyu\Desktop\ZombieDash\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\aliyu\Desktop\ZombieDash\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ZombieDash">
+				<Option output="C:/Users/aliyu/Desktop/ZombieDash/cmake-build-debug/ZombieDash.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/aliyu/Desktop/ZombieDash/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="msvc8"/>
+				<Compiler>
+					<Add directory="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash"/>
+					<Add directory="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/irrKlang"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\ATLMFC\include"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\include"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\ucrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\shared"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\winrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\cppwinrt"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\aliyu\Desktop\ZombieDash\cmake-build-debug\Makefile VERBOSE=1 ZombieDash"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\aliyu\Desktop\ZombieDash\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\aliyu\Desktop\ZombieDash\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\aliyu\Desktop\ZombieDash\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ZombieDash/fast">
+				<Option output="C:/Users/aliyu/Desktop/ZombieDash/cmake-build-debug/ZombieDash.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/aliyu/Desktop/ZombieDash/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="msvc8"/>
+				<Compiler>
+					<Add directory="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash"/>
+					<Add directory="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/irrKlang"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\ATLMFC\include"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\include"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\ucrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\shared"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\winrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\cppwinrt"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\aliyu\Desktop\ZombieDash\cmake-build-debug\Makefile VERBOSE=1 ZombieDash/fast"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\aliyu\Desktop\ZombieDash\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\aliyu\Desktop\ZombieDash\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\aliyu\Desktop\ZombieDash\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="C:/Users/aliyu/Desktop/ZombieDash/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\aliyu\Desktop\ZombieDash\cmake-build-debug\Makefile VERBOSE=1 edit_cache"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\aliyu\Desktop\ZombieDash\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\aliyu\Desktop\ZombieDash\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\aliyu\Desktop\ZombieDash\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="C:/Users/aliyu/Desktop/ZombieDash/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\aliyu\Desktop\ZombieDash\cmake-build-debug\Makefile VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\aliyu\Desktop\ZombieDash\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\aliyu\Desktop\ZombieDash\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\aliyu\Desktop\ZombieDash\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/Actor.cpp">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/Actor.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/GameConstants.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/GameController.cpp">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/GameController.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/GameWorld.cpp">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/GameWorld.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/GraphObject.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/Level.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/SoundFX.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/SpriteManager.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/StudentWorld.cpp">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/StudentWorld.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/freeglut.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/freeglut_ext.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/freeglut_std.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/irrKlang/ik_ESoundEngineOptions.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/irrKlang/ik_ESoundOutputDrivers.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/irrKlang/ik_EStreamModes.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/irrKlang/ik_IAudioRecorder.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/irrKlang/ik_IAudioStream.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/irrKlang/ik_IAudioStreamLoader.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/irrKlang/ik_IFileFactory.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/irrKlang/ik_IFileReader.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/irrKlang/ik_IRefCounted.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/irrKlang/ik_ISound.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/irrKlang/ik_ISoundDeviceList.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/irrKlang/ik_ISoundEffectControl.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/irrKlang/ik_ISoundEngine.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/irrKlang/ik_ISoundMixedOutputReceiver.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/irrKlang/ik_ISoundSource.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/irrKlang/ik_ISoundStopEventReceiver.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/irrKlang/ik_IVirtualRefCounted.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/irrKlang/ik_SAudioStreamFormat.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/irrKlang/ik_irrKlangTypes.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/irrKlang/ik_vec3d.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/irrKlang/irrKlang.h">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/ZombieDash/main.cpp">
+			<Option target="ZombieDash"/>
+		</Unit>
+		<Unit filename="C:/Users/aliyu/Desktop/ZombieDash/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

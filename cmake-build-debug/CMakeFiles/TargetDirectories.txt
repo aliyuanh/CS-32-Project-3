@@ -1,0 +1,3 @@
+C:/Users/aliyu/Desktop/ZombieDash/cmake-build-debug/CMakeFiles/ZombieDash.dir
+C:/Users/aliyu/Desktop/ZombieDash/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/aliyu/Desktop/ZombieDash/cmake-build-debug/CMakeFiles/rebuild_cache.dir

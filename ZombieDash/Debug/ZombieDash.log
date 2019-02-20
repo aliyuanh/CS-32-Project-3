@@ -1,4 +1,4 @@
-﻿  Actor.cpp
-  StudentWorld.cpp
-  Generating Code...
+﻿  StudentWorld.cpp
+c:\users\aliyu\desktop\zombiedash\zombiedash\studentworld.cpp(162): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\aliyu\desktop\zombiedash\zombiedash\studentworld.cpp(163): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
   ZombieDash.vcxproj -> C:\Users\aliyu\Desktop\ZombieDash\Debug\ZombieDash.exe

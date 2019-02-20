@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated />
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="35093069-26d8-470c-b552-1d97e660072e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.vs/ZombieDash/v15/.suo" beforeDir="false" afterPath="$PROJECT_DIR$/.vs/ZombieDash/v15/.suo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vs/ZombieDash/v15/Browse.VC.db" beforeDir="false" afterPath="$PROJECT_DIR$/.vs/ZombieDash/v15/Browse.VC.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vs/ZombieDash/v15/ipch/AutoPCH/4e7dc60e5ccd7393/STUDENTWORLD.ipch" beforeDir="false" afterPath="$PROJECT_DIR$/.vs/ZombieDash/v15/ipch/AutoPCH/4e7dc60e5ccd7393/STUDENTWORLD.ipch" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vs/ZombieDash/v15/ipch/AutoPCH/6d25e370be19c75c/GAMEWORLD.ipch" beforeDir="false" afterPath="$PROJECT_DIR$/.vs/ZombieDash/v15/ipch/AutoPCH/6d25e370be19c75c/GAMEWORLD.ipch" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vs/ZombieDash/v15/ipch/AutoPCH/710916af33cf3fdb/ACTOR.ipch" beforeDir="false" afterPath="$PROJECT_DIR$/.vs/ZombieDash/v15/ipch/AutoPCH/710916af33cf3fdb/ACTOR.ipch" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Debug/ZombieDash.exe" beforeDir="false" afterPath="$PROJECT_DIR$/Debug/ZombieDash.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Debug/ZombieDash.ilk" beforeDir="false" afterPath="$PROJECT_DIR$/Debug/ZombieDash.ilk" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Debug/ZombieDash.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/Debug/ZombieDash.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZombieDash/Actor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/ZombieDash/Actor.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZombieDash/Actor.h" beforeDir="false" afterPath="$PROJECT_DIR$/ZombieDash/Actor.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZombieDash/Debug/Actor.obj" beforeDir="false" afterPath="$PROJECT_DIR$/ZombieDash/Debug/Actor.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZombieDash/Debug/StudentWorld.obj" beforeDir="false" afterPath="$PROJECT_DIR$/ZombieDash/Debug/StudentWorld.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZombieDash/Debug/ZombieDash.log" beforeDir="false" afterPath="$PROJECT_DIR$/ZombieDash/Debug/ZombieDash.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZombieDash/Debug/ZombieDash.tlog/CL.read.1.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/ZombieDash/Debug/ZombieDash.tlog/CL.read.1.tlog" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZombieDash/Debug/ZombieDash.tlog/CL.write.1.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/ZombieDash/Debug/ZombieDash.tlog/CL.write.1.tlog" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZombieDash/Debug/vc141.idb" beforeDir="false" afterPath="$PROJECT_DIR$/ZombieDash/Debug/vc141.idb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZombieDash/Debug/vc141.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/ZombieDash/Debug/vc141.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZombieDash/StudentWorld.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/ZombieDash/StudentWorld.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ZombieDash/StudentWorld.h" beforeDir="false" afterPath="$PROJECT_DIR$/ZombieDash/StudentWorld.h" afterDir="false" />
+    </list>
+    <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="12" column="26" selection-start-line="12" selection-start-column="26" selection-end-line="12" selection-end-column="26" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/ZombieDash/GameController.h">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="85" />
+    <option name="y" value="25" />
+    <option name="width" value="1750" />
+    <option name="height" value="980" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="ZombieDash" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ZombieDash" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ZombieDash" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ZombieDash" type="462c0819:PsiDirectoryNode" />
+              <item name="ZombieDash" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="35093069-26d8-470c-b552-1d97e660072e" name="Default Changelist" comment="" />
+      <created>1550470481618</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1550470481618</updated>
+      <workItem from="1550470485343" duration="19000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="19000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="68" y="20" width="1400" height="784" extended-state="0" />
+    <layout>
+      <window_info id="Favorites" side_tool="true" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Database Changes" />
+      <window_info anchor="bottom" id="Version Control" />
+      <window_info anchor="bottom" id="Terminal" />
+      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info anchor="bottom" id="CMake" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="right" id="Database" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="26" selection-start-line="12" selection-start-column="26" selection-end-line="12" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ZombieDash/GameController.h">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+  </component>
+</project>

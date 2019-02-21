@@ -154,6 +154,29 @@ int StudentWorld::move()
    // return GWSTATUS_PLAYER_DIED;
 }
 void StudentWorld::placeLandmine(int x, int y) {
+	Actor* thing = new Mine(0, 0, this);
+	thing->moveTo(x, y);
+	entities.push_back(thing);
+}
+void StudentWorld::activateLandmine(int x, int y)
+{
+	int startX = x - SPRITE_WIDTH;
+	int startY = y - SPRITE_HEIGHT;
+	Actor* thing;
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			thing = new Flame(0, 0, this);
+			thing->moveTo(startX + i * SPRITE_WIDTH, startY + j * SPRITE_HEIGHT);
+			if (checkCollision(startX + i * SPRITE_WIDTH, startY + j * SPRITE_HEIGHT)) {
+				delete thing;
+			}
+			else {
+				entities.push_back(thing);
+			}
+		}
+
+	}
+
 
 }
 void StudentWorld::fire(int x, int y, Direction dir) {
@@ -299,13 +322,6 @@ bool StudentWorld::checkCollision(int x, int y) {
 			}
 		}
 		
-		/*
-		if (hitPenny((*it)->getX(), (*it)->getY())) {
-			if ((*it)->blocker()) {
-				return true;
-			}
-			//return true;
-		}*/
 	}
 	return false; //has not collided with anything :) 
 

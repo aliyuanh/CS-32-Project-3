@@ -153,6 +153,8 @@ void Penelope::doSomething() {
 		getWorld()->fire(toX, toY, getDirection());
 		break;
 	case KEY_PRESS_TAB:
+		getWorld()->placeLandmine(toX, toY);
+		break;
 	case KEY_PRESS_ENTER:
 	default:
 		break;
@@ -326,3 +328,18 @@ bool VaccineGoodie::canHeal()
 	return true;
 }
 
+Mine::Mine(int x, int y, StudentWorld * world):Stationary(IID_LANDMINE,x,y,right,1)
+{
+	numTicksAlive = 0;
+	setWorld(world);
+}
+
+void Mine::doSomething()
+{
+	numTicksAlive++;
+	if (numTicksAlive >= 30) {
+		getWorld()->activateLandmine(getX(), getY());
+		die();
+	}
+	
+}

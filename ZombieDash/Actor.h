@@ -131,7 +131,9 @@ private:
 class Mine :public Stationary {
 public:
 	Mine(int x, int y, StudentWorld* world);
-
+	virtual void doSomething();
+private:
+	int numTicksAlive;
 };
 class Goodie : public Stationary {
 public:
@@ -158,6 +160,8 @@ public:
 	virtual void doSomething();
 	virtual bool canHeal();
 };
+
+
 
 //TODO: add Trap class (landmines, pits, flames, vomit)
 //possibly make Object class for traps and goodies? + Walls and objects 

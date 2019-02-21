@@ -19,7 +19,12 @@ public:
 	void moveEnts();
 	void nextLevel();
 	void placeLandmine(int x, int y);
+	void fire(int x, int y, Direction dir);
 	bool checkCollision(int x, int y); //if it intersects w any wall, cit, or zomb, then return false 
+	bool hitPenny(int x, int y);
+	void checkTheDead();
+	bool checkKillable(int x, int y);
+
 private:
 	//vector<Actor*> peeps;
 	Actor* penny;

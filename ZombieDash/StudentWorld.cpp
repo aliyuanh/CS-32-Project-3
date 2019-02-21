@@ -22,7 +22,7 @@ StudentWorld::~StudentWorld()
 StudentWorld::StudentWorld(string assetPath)
 : GameWorld(assetPath)
 {
-	numLevel = 3;
+	numLevel = 4;
 	score = 0;
 	numInfected = 0;
 	numFlames = 0;
@@ -59,48 +59,48 @@ int StudentWorld::init()
 				case Level::empty:
 					break;
 				case Level::gas_can_goodie:
-					thing = new GasCan(i, j);
+					thing = new GasCan(i, j,this);
 					entities.push_back(thing);
 					break;
 				case Level::landmine_goodie:
-					thing = new MineGoodie(i, j);
+					thing = new MineGoodie(i, j,this);
 					entities.push_back(thing);
 					break;
 				case Level::vaccine_goodie:
-					thing = new VaccineGoodie(i, j);
+					thing = new VaccineGoodie(i, j,this);
 					entities.push_back(thing);
 					break;
 				case Level::smart_zombie:
-					thing = new SmartZombie(i, j);
+					thing = new SmartZombie(i, j,this);
 					entities.push_back(thing);
 					//cerr << "Made a smart zombie!" << endl;
 					break;
 				case Level::dumb_zombie:
-					thing = new DumbZombie(i, j);
+					thing = new DumbZombie(i, j,this);
 					entities.push_back(thing);
 					//cerr << "Made a dumb zombie!" << endl;
 					break;
 				case Level::player:
 					//cerr << "made penny" << endl;
-					penny = new Penelope(i, j, this);
+					penny = new Penelope(i, j,this);
 					break;
 				case Level::exit:
 					//cerr << "made an exit" << endl;
-					thing = new Exit(i, j);
+					thing = new Exit(i, j,this);
 					entities.push_back(thing);
 					break;
 				case Level::wall:
 					//cerr << "made a wall" << endl;
-					thing = new Wall(i, j);
+					thing = new Wall(i, j,this);
 					entities.push_back(thing);
 					break;
 				case Level::pit:
-					thing = new Trap(i, j);
+					thing = new Trap(i, j,this);
 					entities.push_back(thing);
 					//cerr << "Made a pit!" << endl;
 					break;
 				case Level::citizen:
-					thing = new Citizen(i, j);
+					thing = new Citizen(i, j,this);
 					entities.push_back(thing);
 					//cerr << "Made a citizen!" << endl;
 					numCitizensToSave++;
@@ -135,20 +135,112 @@ void StudentWorld::nextLevel()
 int StudentWorld::move()
 {
 	//cerr << "moving peeps!" << endl;
-	if (getLives() == 0) {
+	if (penny->isAlive() == false) {
+		decLives();
 		return GWSTATUS_PLAYER_DIED;
 	}
 	//check if order is correct later 
+
+	//check if things die
+	checkTheDead();
+
 	moveEnts();
 	penny->doSomething();
 	setGameStatText("Score:  "+ to_string(score) + "  Level:  " + to_string(numLevel)
-	 + "  Vaccines:  " + to_string(numVaccines) + "  Flames:  " + to_string(numFlames)
-	 + "  Mines:  " + to_string(numLandmines) + "  Infected:  " + to_string(numInfected));
+	 + "  Vaccines:  " + to_string(penny->getVaccines()) + "  Flames:  " + to_string(penny->getFlames())
+	 + "  Mines:  " + to_string(penny->getLandmines()) + "  Infected:  " + to_string(penny->numberInfected()));
 	//decLives();
 	return GWSTATUS_CONTINUE_GAME;
    // return GWSTATUS_PLAYER_DIED;
 }
 void StudentWorld::placeLandmine(int x, int y) {
+
+}
+void StudentWorld::fire(int x, int y, Direction dir) {
+	if (penny->getFlames() <= 0) {
+		
+		return;
+	}
+	Actor* thing;
+	switch (dir) {
+	case GraphObject::left:
+		//make da flames 
+		for (int i = 0; i < 3; i++) {
+			thing = new Flame(0 , 0,this);
+			thing->moveTo(x - ((i+1)*SPRITE_WIDTH), y);
+			if (!checkKillable(thing->getX()+4, thing->getY())) {
+				delete thing;
+				break;
+			}
+			else {
+				entities.push_back(thing);
+			}
+		}
+		break;
+
+	case GraphObject::right:
+		for (int i = 0; i < 3; i++) {
+			thing = new Flame(0, 0,this);
+			thing->moveTo(x + ((i + 1) * SPRITE_WIDTH), y);
+			if (!checkKillable(thing->getX(), thing->getY())) {
+				delete thing;
+				break;
+			}
+			else {
+				entities.push_back(thing);
+			}
+		}
+		break;
+
+	case GraphObject::up:
+		for (int i = 0; i < 3; i++) {
+			thing = new Flame(0, 0,this);
+			thing->moveTo(x, y + (i+1)*SPRITE_HEIGHT);
+			if (!checkKillable(thing->getX(), thing->getY())) {
+				delete thing;
+				break;
+			}
+			else {
+				entities.push_back(thing);
+			}
+		}
+		break;
+
+	case GraphObject::down:
+		for (int i = 0; i < 3; i++) {
+			thing = new Flame(0, 0,this);
+			thing->moveTo(x, y - (i + 1)*SPRITE_HEIGHT);
+			if (!checkKillable(thing->getX(), thing->getY())) {
+				delete thing;
+				break;
+			}
+			else {
+				entities.push_back(thing);
+			}
+		}
+		break; 
+	default: 
+		break;
+	}
+	penny->fireFlame();
+}
+
+bool StudentWorld::checkKillable(int x, int y) {
+	for (list<Actor*>::iterator it = entities.begin(); it != entities.end(); it++) {
+		//check every entitity against those 
+		int diffX = abs(x - (*it)->getX()) - 4;
+		int diffY = abs(y - (*it)->getY()) - 4;
+		if (diffX * diffX + diffY * diffY <= 100) {
+			if ((*it)->canBeKilled() && (*it)->blocker()) {
+				return true;
+			}
+			else if ((*it)->blocker()) {
+				return false;
+			}
+		}
+
+	}
+	return true;
 
 }
 
@@ -159,6 +251,7 @@ bool StudentWorld::checkCollision(int x, int y) {
 	for (list<Actor*>::iterator it = entities.begin(); it != entities.end(); it++) {
 	//check every entitity against those 
 		//later, check to make sure it's one of Zombie, Wall, or Citizen 
+		
 		int diffX = abs(x - (*it)->getX()) - 4;
 		int diffY = abs( y - (*it)->getY()) - 4;
 		if ((*it)->getY()-y <= 12 &&(*it)->getY()-y >= 0 && x-(*it)->getX() <= 12 && x-(*it)->getX() >= 0 && (*it)->blocker()) {
@@ -172,6 +265,29 @@ bool StudentWorld::checkCollision(int x, int y) {
 		if (diffX * diffX + diffY*diffY <= 100) {
 			//cout << "collision happening!" << endl;
 			//cerr << "collided w something" << endl;
+			if ((*it)->canKill()) {
+				//decLives();
+				penny->die();
+				return true;
+			}
+			//goodies!
+			if ((*it)->canPickUp()) {
+				//cerr << "it's a goodie boi " << endl;
+				if ((*it)->canFire()) {
+					penny->giveFlames();
+				}
+				if ((*it)->canHeal()) {
+					penny->giveVaccines();
+				}
+				if ((*it)->canDrop()) {
+					penny->giveLandmines();
+				}
+				playSound(SOUND_GOT_GOODIE);
+				score += 50;
+				(*it)->die();
+			}
+
+
 			if ((*it)->blocker()) {
 				return true;
 			}
@@ -182,14 +298,53 @@ bool StudentWorld::checkCollision(int x, int y) {
 
 			}
 		}
+		
+		/*
+		if (hitPenny((*it)->getX(), (*it)->getY())) {
+			if ((*it)->blocker()) {
+				return true;
+			}
+			//return true;
+		}*/
 	}
 	return false; //has not collided with anything :) 
 
 }//if it intersects w any wall, cit, or zomb, then return false 
+//need to implement later :( 
+bool StudentWorld::hitPenny(int x, int y) {
+	int diffX = abs(x - penny->getX())-8;
+	int diffY = abs(y - penny->getY())-2;
+	if (y-penny->getY()<= 16 && y-penny->getY()>= 0 && penny->getX()-x <= 16 && penny->getX()-x >= 0) {
+		//upper left corner checker
+		//return true;
+	}
+	if (y-penny->getY()<= 16 && y-penny->getY()>= 0 && penny->getX() - x <= 16 && penny->getX() - x >= 0 ) {
+		//upper right corner checker
+		//return true;
+	}
+	if (diffX * diffX + diffY * diffY <= 100) {
+		return true;
+	}
+	return false;
+}
+void StudentWorld::checkTheDead() {
+	for (list<Actor*>::iterator it = entities.begin(); it != entities.end();) {
+		//delete if things die :) 
+		if ((*it)->isAlive() == false) {
+			delete (*it);
+			entities.erase(it);
+			it = entities.begin();
+		}
+		else {
+			it++;
+		}
+	}
+}
 
 void StudentWorld::cleanUp()
 {
 	delete penny;
+	penny = nullptr;
 	std::list<Actor*>::iterator it1;
 	it1 = entities.begin();
 	while (it1 != entities.end()) {

@@ -224,7 +224,9 @@ Citizen::Citizen(int posX, int posY, StudentWorld* world, Actor* penny):Moving(I
 	setPenny(penny);
 }
 void Citizen::doSomething() {
+	//TODO: check for collisions with zambies!!1
 	incrementTicks();
+	getWorld()->checkObjectOverlap(this);
 	if (!isAlive()) {
 		std::cout << "I, a citizen, am dead" << std::endl;
 		return;
@@ -238,19 +240,14 @@ void Citizen::doSomething() {
 		return;
 	}
 	if (numTicksHere() % 2 == 0) {
-		std::cout << "do nothing" << std::endl;
+		//std::cout << "do nothing" << std::endl;
 		return;
 	}
 	if (pene == nullptr) {
 		std::cout << "oh no penny does not exist :(" << std::endl;
 		return;
 	}
-	//std::cout << getPenny()->getX() << std::endl;
-	//good enough for now... kinda buggy, but tbh whatever 
 	dist_p = (getX() - getPenny()->getX()) * (getX() - getPenny()->getX()) + (getY() - getPenny()->getY()) * (getY() - getPenny()->getY());
-	//dist_p = (getX() - pene->getX())*(getX() - pene->getX()) + (getY() - pene->getY())*(getY() - pene->getY());
-	//std::cout << "my distance to penny is " << dist_p<<std::endl;
-
 	if (dist_p <= 64*64) {
 		if (dist_p < 0) {
 			return;
@@ -282,18 +279,27 @@ void Citizen::doSomething() {
 		//if they're on the same "row"
 		if (diffY == 0) {
 			if (diffX > 0) {
-				setDirection(left);
+				if (!getWorld()->checkCollision(getX() - 2, getY())) {
+					std::cout << "am blocked" << std::endl;
+					return;
+				}
 					if (getPenny()->getX() - getX() <= -18) {
+						setDirection(left);
+
 						moveTo(getX() - 2, getY());
 						return;
 					}
 			}
 			else {
-				setDirection(right);
-					if (getX() - getPenny()->getX() <= -18) {
+				if (!getWorld()->checkCollision(getX() + 2, getY())) {
+					std::cout << "am blocked" << std::endl;
+					return;
+				}
+				if (getX() - getPenny()->getX() <= -18) {
+						setDirection(right);
 						moveTo(getX() + 2, getY());
 						return;
-					}
+				}
 				
 			}
 		}
@@ -305,20 +311,24 @@ void Citizen::doSomething() {
 			if (diffY > 0) {
 				//move down
 				//this is left-down
+				if (getWorld()->checkObjectOverlap(this)) {
+					return;
+				}
+
 				std::cout << "left down" << std::endl;
 				if (randThing == 0) {
 					//move down
-					setDirection(down);
 					std::cout << getY() - getPenny()->getY();
-					if (getY() - getPenny()->getY() >= 18) {
+					if (getY() - getPenny()->getY() >= 22) {
+						setDirection(down);
 						moveTo(getX(), getY() - 2);
 						return;
 					}
 				}
 				else {
 					//mofe left
-					setDirection(left);
-					if (getPenny()->getX() - getX() <= -18) {
+					if (getPenny()->getX() - getX() <= -22) {
+						setDirection(left);
 						moveTo(getX() - 2, getY());
 						return;
 					}
@@ -330,16 +340,16 @@ void Citizen::doSomething() {
 				std::cout << "left up" << std::endl;
 				if (randThing == 0) {
 					//move up
-					setDirection(up);
-					if (getPenny()->getY() - getY() >= 16) {
+					if (getPenny()->getY() - getY() >= 22) {
+						setDirection(up);
 						moveTo(getX(), getY() + 2);
 						return;
 					}
 				}
 				else {
 					//mofe left
-					setDirection(left);
-					if (getPenny()->getX() - getX() <= -18) {
+					if (getPenny()->getX() - getX() <= -22) {
+						setDirection(left);
 						moveTo(getX() - 2, getY());
 						return;
 					}
@@ -356,15 +366,22 @@ void Citizen::doSomething() {
 				if (randThing == 0) {
 					//move down
 					//std::cout << "moving down" << std::endl;
-					setDirection(down);
 					std::cout << getY() - getPenny()->getY();
-						if (getY() - getPenny()->getY() >= 16) {
+						if (getY() - getPenny()->getY() >= 22) {
+							setDirection(down);
 							moveTo(getX(), getY() - 2);
 							return;
 						}
 				}
 				else {
 					//mofe right
+					if (getX() - getPenny()->getX() <= -22) {
+						setDirection(right);
+
+						moveTo(getX() + 2, getY());
+						return;
+					}
+
 				}
 			}
 			else {
@@ -373,13 +390,19 @@ void Citizen::doSomething() {
 				std::cout << "right up" << std::endl;
 				if (randThing == 0) {
 					//move up
-					if (getPenny()->getY() - getY() >= 16) {
+					if (getPenny()->getY() - getY() >= 22) {
 						moveTo(getX(), getY() + 2);
 						return;
 					}
 				}
 				else {
 					//mofe right
+					setDirection(right);
+					if (getX() - getPenny()->getX() <= -22) {
+						moveTo(getX() + 2, getY());
+						return;
+					}
+
 				}
 
 			}

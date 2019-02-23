@@ -311,6 +311,31 @@ void StudentWorld::turnCitizenToZombie(int x, int y)
 
 }
 
+bool StudentWorld::checkObjectOverlap(Actor * p)
+{
+	//if this returns true, kill p
+	for (list<Actor*>::iterator it = entities.begin(); it != entities.end(); it++) {
+		if ((*it) == p) {
+			continue;
+		}
+		int diffX = abs(p->getX() - (*it)->getX()) - 4;
+		int diffY = abs(p->getY() - (*it)->getY()) - 4;
+		if (diffX * diffX + diffY * diffY <= 100) {
+			if ((*it)->canKill()) {
+				p->die();
+				return true;
+			}
+			if ((*it)->blocker()) {
+				return true;
+			}
+
+		}
+
+	}
+
+	return false;
+}
+
 bool StudentWorld::checkCollision(int x, int y) {
 	if (entities.size() == 0) {
 		return true;

@@ -27,6 +27,7 @@ public:
 	bool checkKillable(int x, int y);
 	bool checkExit(int x, int y);
 	void turnCitizenToZombie(int x, int y);
+	bool checkObjectOverlap(Actor* p);
 
 private:
 	//vector<Actor*> peeps;

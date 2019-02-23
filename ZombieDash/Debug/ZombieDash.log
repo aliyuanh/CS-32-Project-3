@@ -2,10 +2,10 @@
 c:\users\aliyu\desktop\zombiedash\zombiedash\actor.cpp(158): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
 c:\users\aliyu\desktop\zombiedash\zombiedash\actor.cpp(159): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
 c:\users\aliyu\desktop\zombiedash\zombiedash\actor.cpp(237): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\aliyu\desktop\zombiedash\zombiedash\actor.cpp(249): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-c:\users\aliyu\desktop\zombiedash\zombiedash\actor.cpp(258): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\aliyu\desktop\zombiedash\zombiedash\actor.cpp(250): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
 c:\users\aliyu\desktop\zombiedash\zombiedash\actor.cpp(259): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\aliyu\desktop\zombiedash\zombiedash\actor.cpp(264): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\aliyu\desktop\zombiedash\zombiedash\actor.cpp(272): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\aliyu\desktop\zombiedash\zombiedash\actor.cpp(455): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\aliyu\desktop\zombiedash\zombiedash\actor.cpp(260): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\aliyu\desktop\zombiedash\zombiedash\actor.cpp(265): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\aliyu\desktop\zombiedash\zombiedash\actor.cpp(274): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\aliyu\desktop\zombiedash\zombiedash\actor.cpp(544): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
   ZombieDash.vcxproj -> C:\Users\aliyu\Desktop\ZombieDash\Debug\ZombieDash.exe

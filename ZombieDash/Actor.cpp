@@ -238,6 +238,7 @@ void Citizen::doSomething() {
 		return;
 	}
 	if (numTicksHere() % 2 == 0) {
+		std::cout << "do nothing" << std::endl;
 		return;
 	}
 	if (pene == nullptr) {
@@ -246,11 +247,11 @@ void Citizen::doSomething() {
 	}
 	//std::cout << getPenny()->getX() << std::endl;
 	//good enough for now... kinda buggy, but tbh whatever 
-	dist_p = (getX() - getPenny()->getX()) * (getX() - getPenny()->getX()) + (getY() - getPenny()->getY()) * (getY() - getPenny()->getY()) - 256;
+	dist_p = (getX() - getPenny()->getX()) * (getX() - getPenny()->getX()) + (getY() - getPenny()->getY()) * (getY() - getPenny()->getY());
 	//dist_p = (getX() - pene->getX())*(getX() - pene->getX()) + (getY() - pene->getY())*(getY() - pene->getY());
 	//std::cout << "my distance to penny is " << dist_p<<std::endl;
 
-	if (dist_p <= 180) {
+	if (dist_p <= 64*64) {
 		if (dist_p < 0) {
 			return;
 		}
@@ -264,14 +265,16 @@ void Citizen::doSomething() {
 				if (!getWorld()->checkCollision(getX(), getY())-2) {
 					if (getY()-getPenny()->getY() >=18) {
 						moveTo(getX(), getY() - 2);
+						return;
 					}
 				}
 			}
 			else {
 				setDirection(up);
 				if (!getWorld()->checkCollision(getX(), getY()) + 2) {
-					if (getPenny()->getY() - getY() >= 18) {
+					if (getPenny()->getY() - getY() >= 22) {
 						moveTo(getX(), getY() + 2);
+						return;
 					}
 				}
 			}
@@ -280,20 +283,107 @@ void Citizen::doSomething() {
 		if (diffY == 0) {
 			if (diffX > 0) {
 				setDirection(left);
-				if (getPenny()->getX() - getX()<= -18) {
-					moveTo(getX() - 2, getY());
-				}
+					if (getPenny()->getX() - getX() <= -18) {
+						moveTo(getX() - 2, getY());
+						return;
+					}
 			}
 			else {
 				setDirection(right);
-				if (getX() - getPenny()->getX() <= -18) {
-					moveTo(getX() + 2, getY());
-				}
+					if (getX() - getPenny()->getX() <= -18) {
+						moveTo(getX() + 2, getY());
+						return;
+					}
+				
 			}
 		}
 
 		//now, if they aren't on the same row/col
+		int randThing = randInt(0, 1);
+		if (diffX > 0) {
+			//move left
+			if (diffY > 0) {
+				//move down
+				//this is left-down
+				std::cout << "left down" << std::endl;
+				if (randThing == 0) {
+					//move down
+					setDirection(down);
+					std::cout << getY() - getPenny()->getY();
+					if (getY() - getPenny()->getY() >= 18) {
+						moveTo(getX(), getY() - 2);
+						return;
+					}
+				}
+				else {
+					//mofe left
+					setDirection(left);
+					if (getPenny()->getX() - getX() <= -18) {
+						moveTo(getX() - 2, getY());
+						return;
+					}
+				}
+			}
+			else {
+				//move up
+				//this is left-up
+				std::cout << "left up" << std::endl;
+				if (randThing == 0) {
+					//move up
+					setDirection(up);
+					if (getPenny()->getY() - getY() >= 16) {
+						moveTo(getX(), getY() + 2);
+						return;
+					}
+				}
+				else {
+					//mofe left
+					setDirection(left);
+					if (getPenny()->getX() - getX() <= -18) {
+						moveTo(getX() - 2, getY());
+						return;
+					}
+				}
+			}
 
+		}
+		else {
+			//move right
+			if (diffY > 0) {
+				//move down
+				//this is down left 
+				//std::cout << "right down" << std::endl;
+				if (randThing == 0) {
+					//move down
+					//std::cout << "moving down" << std::endl;
+					setDirection(down);
+					std::cout << getY() - getPenny()->getY();
+						if (getY() - getPenny()->getY() >= 16) {
+							moveTo(getX(), getY() - 2);
+							return;
+						}
+				}
+				else {
+					//mofe right
+				}
+			}
+			else {
+				//move up
+				//this is up left
+				std::cout << "right up" << std::endl;
+				if (randThing == 0) {
+					//move up
+					if (getPenny()->getY() - getY() >= 16) {
+						moveTo(getX(), getY() + 2);
+						return;
+					}
+				}
+				else {
+					//mofe right
+				}
+
+			}
+		}
 	}
 }
 

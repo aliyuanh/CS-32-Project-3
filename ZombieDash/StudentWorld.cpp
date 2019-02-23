@@ -22,7 +22,7 @@ StudentWorld::~StudentWorld()
 StudentWorld::StudentWorld(string assetPath)
 : GameWorld(assetPath)
 {
-	numLevel = 3;
+	numLevel = 2;
 	score = 0;
 	numInfected = 0;
 	numFlames = 0;

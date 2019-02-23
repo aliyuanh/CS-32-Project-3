@@ -248,17 +248,17 @@ void Citizen::doSomething() {
 	//good enough for now... kinda buggy, but tbh whatever 
 	dist_p = (getX() - getPenny()->getX()) * (getX() - getPenny()->getX()) + (getY() - getPenny()->getY()) * (getY() - getPenny()->getY()) - 256;
 	//dist_p = (getX() - pene->getX())*(getX() - pene->getX()) + (getY() - pene->getY())*(getY() - pene->getY());
-	std::cout << "my distance to penny is " << dist_p<<std::endl;
+	//std::cout << "my distance to penny is " << dist_p<<std::endl;
 
 	if (dist_p <= 180) {
 		if (dist_p < 0) {
 			return;
 		}
-		std::cout << "I can move towards penny!" << std::endl;
+		//std::cout << "I can move towards penny!" << std::endl;
 		int diffX = getX() - getPenny()->getX();
 		int diffY = getY() - getPenny()->getY();
+		//if they're on the same "column"
 		if (diffX == 0) {
-			std::cout << "same rowsz" << std::endl;
 			if (diffY > 0) {
 				setDirection(down);
 				if (!getWorld()->checkCollision(getX(), getY())-2) {
@@ -276,8 +276,23 @@ void Citizen::doSomething() {
 				}
 			}
 		}
+		//if they're on the same "row"
+		if (diffY == 0) {
+			if (diffX > 0) {
+				setDirection(left);
+				if (getPenny()->getX() - getX()<= -18) {
+					moveTo(getX() - 2, getY());
+				}
+			}
+			else {
+				setDirection(right);
+				if (getX() - getPenny()->getX() <= -18) {
+					moveTo(getX() + 2, getY());
+				}
+			}
+		}
 
-
+		//now, if they aren't on the same row/col
 
 	}
 }

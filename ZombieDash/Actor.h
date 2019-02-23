@@ -124,6 +124,7 @@ class Flame : public Stationary {
 public:
 	Flame(int posX, int posY, StudentWorld* world);
 	virtual void doSomething();
+	virtual bool canKill();
 private:
 	int numTicksAlive;
 };

@@ -156,15 +156,14 @@ void Penelope::doSomething() {
 		getWorld()->placeLandmine(toX, toY);
 		break;
 	case KEY_PRESS_ENTER:
+		break;
 	default:
 		break;
 	}
-	if (moving) {
-		if (getWorld()->checkCollision(toX, toY)) {
-			//std::cout << "uh oh! can't move, it's collidin" << std::endl;
-			//std::cout << toX << "," << toY << std::endl;
+	if ( getWorld()->checkCollision(toX, toY)) {
 		}
-		else {
+	else {
+		if (moving) {
 			moveTo(toX, toY);
 		}
 	}
@@ -271,6 +270,10 @@ void Flame::doSomething()
 		die();
 	}
 	numTicksAlive++;
+}
+bool Flame::canKill()
+{
+	return true;
 }
 //Goodies
 

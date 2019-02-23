@@ -25,6 +25,7 @@ public:
 	bool hitPenny(int x, int y);
 	void checkTheDead();
 	bool checkKillable(int x, int y);
+	bool checkExit(int x, int y);
 
 private:
 	//vector<Actor*> peeps;

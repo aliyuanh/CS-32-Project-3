@@ -22,7 +22,7 @@ StudentWorld::~StudentWorld()
 StudentWorld::StudentWorld(string assetPath)
 : GameWorld(assetPath)
 {
-	numLevel = 4;
+	numLevel = 3;
 	score = 0;
 	numInfected = 0;
 	numFlames = 0;
@@ -155,8 +155,17 @@ int StudentWorld::move()
 }
 void StudentWorld::placeLandmine(int x, int y) {
 	Actor* thing = new Mine(0, 0, this);
-	thing->moveTo(x, y);
-	entities.push_back(thing);
+	//made a new mine
+	if (checkExit(x, y)) {
+		cout << "oof is on a place that isn't killable" << endl;
+		delete thing;
+	}
+	else {
+		cout << "made a new mine!" << endl;
+
+		thing->moveTo(x, y);
+		entities.push_back(thing);
+	}
 }
 void StudentWorld::activateLandmine(int x, int y)
 {
@@ -167,7 +176,7 @@ void StudentWorld::activateLandmine(int x, int y)
 		for (int j = 0; j < 3; j++) {
 			thing = new Flame(0, 0, this);
 			thing->moveTo(startX + i * SPRITE_WIDTH, startY + j * SPRITE_HEIGHT);
-			if (checkCollision(startX + i * SPRITE_WIDTH, startY + j * SPRITE_HEIGHT)) {
+			if (!checkKillable(startX + i * SPRITE_WIDTH + 4, startY + j * SPRITE_HEIGHT + 4)) {
 				delete thing;
 			}
 			else {
@@ -251,19 +260,39 @@ void StudentWorld::fire(int x, int y, Direction dir) {
 bool StudentWorld::checkKillable(int x, int y) {
 	for (list<Actor*>::iterator it = entities.begin(); it != entities.end(); it++) {
 		//check every entitity against those 
-		int diffX = abs(x - (*it)->getX()) - 4;
-		int diffY = abs(y - (*it)->getY()) - 4;
+		int diffX = abs(x - (*it)->getX());
+		int diffY = abs(y - (*it)->getY());
 		if (diffX * diffX + diffY * diffY <= 100) {
-			if ((*it)->canBeKilled() && (*it)->blocker()) {
+			if ((*it)->canBeKilled() && (*it)->blocker() || (*it)->canPickUp()) {
+				//if it can be killed and it's a blocker (ie a citizen or a zombie), make the thing
 				return true;
 			}
 			else if ((*it)->blocker()) {
+				//if it blocks stuff, don't make the thing
 				return false;
 			}
 		}
 
 	}
 	return true;
+
+}
+
+bool StudentWorld::checkExit(int x, int y) {
+	for (list<Actor*>::iterator it = entities.begin(); it != entities.end(); it++) {
+		//check every entitity against those 
+		int diffX = abs(x - (*it)->getX()) - 4;
+		int diffY = abs(y - (*it)->getY()) - 4;
+		if (diffX * diffX + diffY * diffY <= 100) {
+			if ((*it)->isExit()) {
+				cout << "tryna make something on an exit :(" << endl;
+				//if it is an exit, say it is 
+				return true;
+			}
+		}
+
+	}
+	return false;
 
 }
 
@@ -274,7 +303,11 @@ bool StudentWorld::checkCollision(int x, int y) {
 	for (list<Actor*>::iterator it = entities.begin(); it != entities.end(); it++) {
 	//check every entitity against those 
 		//later, check to make sure it's one of Zombie, Wall, or Citizen 
-		
+		if (abs(x - (*it)->getX()) * abs(x - (*it)->getX()) + abs(y - (*it)->getY())*abs(y - (*it)->getY()) <= 100 && (*it)->canKill()) {
+			penny->die();
+			cout << "penny died to flames" << endl;
+			return true;
+		}
 		int diffX = abs(x - (*it)->getX()) - 4;
 		int diffY = abs( y - (*it)->getY()) - 4;
 		if ((*it)->getY()-y <= 12 &&(*it)->getY()-y >= 0 && x-(*it)->getX() <= 12 && x-(*it)->getX() >= 0 && (*it)->blocker()) {

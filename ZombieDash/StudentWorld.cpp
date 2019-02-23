@@ -100,7 +100,7 @@ int StudentWorld::init()
 					//cerr << "Made a pit!" << endl;
 					break;
 				case Level::citizen:
-					thing = new Citizen(i, j,this);
+					thing = new Citizen(i, j,this, penny);
 					entities.push_back(thing);
 					//cerr << "Made a citizen!" << endl;
 					numCitizensToSave++;
@@ -112,17 +112,16 @@ int StudentWorld::init()
 
 		}
 	}
-
+	for (list<Actor*>::iterator it = entities.begin(); it != entities.end(); it++) {
+		(*it)->setPenny(penny);
+	}
 
     return GWSTATUS_CONTINUE_GAME;
 }
 
 void StudentWorld::moveEnts() {
 	for (list<Actor*>::iterator it = entities.begin(); it != entities.end(); it++) {
-		if (!((*it)->blocker())) {
-			(*it)->doSomething();
-			//cout << "moving an actor in moveEnts" << endl;
-		}
+		(*it)->doSomething();
 	}
 }
 void StudentWorld::nextLevel()
@@ -296,6 +295,22 @@ bool StudentWorld::checkExit(int x, int y) {
 
 }
 
+void StudentWorld::turnCitizenToZombie(int x, int y)
+{
+	playSound(SOUND_ZOMBIE_BORN);
+	score -= 1000;
+	int numRand = randInt(1,10);
+	Actor* thing;
+	if (numRand >= 1 && numRand <= 3) {
+		thing = new SmartZombie(0, 0,this);
+	}
+	else {
+		thing = new DumbZombie(0, 0, this);
+	}
+	thing->moveTo(x, y);
+
+}
+
 bool StudentWorld::checkCollision(int x, int y) {
 	if (entities.size() == 0) {
 		return true;
@@ -352,6 +367,9 @@ bool StudentWorld::checkCollision(int x, int y) {
 				nextLevel();
 				return true;
 
+			}
+			if ((*it)->canExplode()) {
+				(*it)->explode();
 			}
 		}
 		

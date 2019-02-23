@@ -1,14 +1,11 @@
-﻿  StudentWorld.cpp
-c:\users\aliyu\desktop\zombiedash\zombiedash\studentworld.cpp(203): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\aliyu\desktop\zombiedash\zombiedash\studentworld.cpp(217): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\aliyu\desktop\zombiedash\zombiedash\studentworld.cpp(231): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\aliyu\desktop\zombiedash\zombiedash\studentworld.cpp(245): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\aliyu\desktop\zombiedash\zombiedash\studentworld.cpp(263): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\aliyu\desktop\zombiedash\zombiedash\studentworld.cpp(264): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\aliyu\desktop\zombiedash\zombiedash\studentworld.cpp(284): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\aliyu\desktop\zombiedash\zombiedash\studentworld.cpp(285): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\aliyu\desktop\zombiedash\zombiedash\studentworld.cpp(311): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\aliyu\desktop\zombiedash\zombiedash\studentworld.cpp(312): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\aliyu\desktop\zombiedash\zombiedash\studentworld.cpp(364): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\aliyu\desktop\zombiedash\zombiedash\studentworld.cpp(365): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+﻿  Actor.cpp
+c:\users\aliyu\desktop\zombiedash\zombiedash\actor.cpp(158): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\aliyu\desktop\zombiedash\zombiedash\actor.cpp(159): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\aliyu\desktop\zombiedash\zombiedash\actor.cpp(237): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\aliyu\desktop\zombiedash\zombiedash\actor.cpp(249): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\users\aliyu\desktop\zombiedash\zombiedash\actor.cpp(260): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\aliyu\desktop\zombiedash\zombiedash\actor.cpp(261): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\aliyu\desktop\zombiedash\zombiedash\actor.cpp(266): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\aliyu\desktop\zombiedash\zombiedash\actor.cpp(274): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\aliyu\desktop\zombiedash\zombiedash\actor.cpp(441): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
   ZombieDash.vcxproj -> C:\Users\aliyu\Desktop\ZombieDash\Debug\ZombieDash.exe

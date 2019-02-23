@@ -11,6 +11,7 @@ Actor::Actor(int imageID, double startX, double startY, StudentWorld* world,Dire
 	numLandmines = 0;
 	numVaccines = 0;
 	myWorld = world;
+	numTicks = 0;
 }
 
 bool Actor::blocker()
@@ -62,6 +63,10 @@ int Actor::numberInfected()
 {
 	return numInfected;
 }
+void Actor::incrementInfect()
+{
+	numInfected++;
+}
 bool Actor::testInfected()
 {
 	return isInfected;
@@ -111,6 +116,20 @@ void Actor::fireFlame()
 	numFlames--;
 }
 
+void Actor::explode()
+{
+}
+
+int Actor::numTicksHere()
+{
+	return numTicks;
+}
+
+void Actor::incrementTicks()
+{
+	numTicks++;
+}
+
 StudentWorld * Actor::getWorld()
 {
 	return myWorld;
@@ -119,6 +138,16 @@ StudentWorld * Actor::getWorld()
 void Actor::setWorld(StudentWorld * world)
 {
 	myWorld = world;
+}
+
+Actor * Actor::getPenny()
+{
+	return myPenny;
+}
+
+void Actor::setPenny(Actor * p)
+{
+	myPenny = p;
 }
 
 void Penelope::doSomething() {
@@ -187,12 +216,70 @@ bool Moving::canBeKilled()
 }
 
 //Citizens 
-Citizen::Citizen(int posX, int posY, StudentWorld* world):Moving(IID_CITIZEN, posX, posY, right, 0)
+Citizen::Citizen(int posX, int posY, StudentWorld* world, Actor* penny):Moving(IID_CITIZEN, posX, posY, right, 0)
 {
 	setWorld(world);
+	dist_p = 10000;
+	dist_z = 0;
+	setPenny(penny);
 }
 void Citizen::doSomething() {
-	
+	incrementTicks();
+	if (!isAlive()) {
+		std::cout << "I, a citizen, am dead" << std::endl;
+		return;
+	}
+	if (testInfected()) {
+		incrementInfect();
+	}
+	if (numberInfected() >= 500) {
+		die();
+		getWorld()->turnCitizenToZombie(getX(), getY());
+		return;
+	}
+	if (numTicksHere() % 2 == 0) {
+		return;
+	}
+	if (pene == nullptr) {
+		std::cout << "oh no penny does not exist :(" << std::endl;
+		return;
+	}
+	//std::cout << getPenny()->getX() << std::endl;
+	//good enough for now... kinda buggy, but tbh whatever 
+	dist_p = (getX() - getPenny()->getX()) * (getX() - getPenny()->getX()) + (getY() - getPenny()->getY()) * (getY() - getPenny()->getY()) - 256;
+	//dist_p = (getX() - pene->getX())*(getX() - pene->getX()) + (getY() - pene->getY())*(getY() - pene->getY());
+	std::cout << "my distance to penny is " << dist_p<<std::endl;
+
+	if (dist_p <= 180) {
+		if (dist_p < 0) {
+			return;
+		}
+		std::cout << "I can move towards penny!" << std::endl;
+		int diffX = getX() - getPenny()->getX();
+		int diffY = getY() - getPenny()->getY();
+		if (diffX == 0) {
+			std::cout << "same rowsz" << std::endl;
+			if (diffY > 0) {
+				setDirection(down);
+				if (!getWorld()->checkCollision(getX(), getY())-2) {
+					if (getY()-getPenny()->getY() >=18) {
+						moveTo(getX(), getY() - 2);
+					}
+				}
+			}
+			else {
+				setDirection(up);
+				if (!getWorld()->checkCollision(getX(), getY()) + 2) {
+					if (getPenny()->getY() - getY() >= 18) {
+						moveTo(getX(), getY() + 2);
+					}
+				}
+			}
+		}
+
+
+
+	}
 }
 
 Zombie::Zombie(int posX, int posY):Moving(IID_ZOMBIE, posX, posY, right, 0) {
@@ -333,16 +420,28 @@ bool VaccineGoodie::canHeal()
 
 Mine::Mine(int x, int y, StudentWorld * world):Stationary(IID_LANDMINE,x,y,right,1)
 {
-	numTicksAlive = 0;
 	setWorld(world);
 }
 
 void Mine::doSomething()
 {
-	numTicksAlive++;
-	if (numTicksAlive >= 30) {
+	incrementTicks();
+	//if (numTicksAlive >= 30) {
+		//getWorld()->activateLandmine(getX(), getY());
+		//die();
+	//}
+	
+}
+
+void Mine::explode()
+{
+	if (numTicksHere() >= 30) {
 		getWorld()->activateLandmine(getX(), getY());
 		die();
 	}
-	
+}
+
+bool Mine::canExplode()
+{
+	return true;
 }

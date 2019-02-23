@@ -21,6 +21,7 @@ public:
 	virtual bool canDrop();
 	virtual bool canHeal();
 	virtual int numberInfected();
+	virtual void incrementInfect();
 	virtual bool testInfected();
 	virtual void infect();
 	virtual int getFlames();
@@ -31,8 +32,13 @@ public:
 	virtual void giveVaccines();
 	virtual void cure();
 	virtual void fireFlame();
+	virtual void explode();
+	int numTicksHere();
+	void incrementTicks();
 	virtual StudentWorld* getWorld();
 	virtual void setWorld(StudentWorld* world);
+	virtual Actor* getPenny();
+	virtual void setPenny(Actor* p);
 private:
 	bool living;
 	int numInfected;
@@ -41,6 +47,8 @@ private:
 	int numLandmines;
 	int numVaccines;
 	StudentWorld* myWorld;
+	int numTicks;
+	Actor* myPenny;
 };
 
 
@@ -67,11 +75,12 @@ private:
 
 class Citizen : public Moving {
 public:
-	Citizen(int posX, int posY, StudentWorld* world);
+	Citizen(int posX, int posY, StudentWorld* world, Actor* penny);
 	virtual void doSomething();
 private:
-
-
+	int dist_p;
+	int dist_z;
+	Actor* pene;
 };
 
 class Zombie :public Moving {
@@ -133,6 +142,8 @@ class Mine :public Stationary {
 public:
 	Mine(int x, int y, StudentWorld* world);
 	virtual void doSomething();
+	virtual void explode();
+	virtual bool canExplode();
 private:
 	int numTicksAlive;
 };

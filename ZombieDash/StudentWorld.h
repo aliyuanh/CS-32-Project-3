@@ -28,6 +28,8 @@ public:
 	bool checkExit(int x, int y);
 	void turnCitizenToZombie(int x, int y);
 	bool checkObjectOverlap(Actor* p);
+	bool personMoveFreely(Actor* p, int x, int y);
+	void citizenDie();
 
 private:
 	//vector<Actor*> peeps;

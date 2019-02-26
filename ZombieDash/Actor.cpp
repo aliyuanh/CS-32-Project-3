@@ -19,6 +19,11 @@ bool Actor::blocker()
 	return false;
 }
 
+bool Actor::fullBlock()
+{
+	return false;
+}
+
 bool Actor::isExit()
 {
 	return false;
@@ -148,6 +153,11 @@ Actor * Actor::getPenny()
 void Actor::setPenny(Actor * p)
 {
 	myPenny = p;
+}
+
+bool Actor::canExit()
+{
+	return false;
 }
 
 void Penelope::doSomething() {
@@ -311,48 +321,48 @@ void Citizen::doSomething() {
 			if (diffY > 0) {
 				//move down
 				//this is left-down
-				if (getWorld()->checkObjectOverlap(this)) {
-					return;
-				}
-
-				std::cout << "left down" << std::endl;
 				if (randThing == 0) {
 					//move down
-					std::cout << getY() - getPenny()->getY();
-					if (getY() - getPenny()->getY() >= 22) {
-						setDirection(down);
-						moveTo(getX(), getY() - 2);
+					if (!getWorld()->personMoveFreely(this, getX(), getY() - 2)) {
 						return;
 					}
+					setDirection(down);
+					moveTo(getX(), getY() - 2);
+					return;
 				}
 				else {
 					//mofe left
-					if (getPenny()->getX() - getX() <= -22) {
+					if (!getWorld()->personMoveFreely(this, getX()-2, getY())) {
+						return;
+					}
 						setDirection(left);
 						moveTo(getX() - 2, getY());
 						return;
-					}
 				}
 			}
 			else {
 				//move up
 				//this is left-up
-				std::cout << "left up" << std::endl;
 				if (randThing == 0) {
 					//move up
-					if (getPenny()->getY() - getY() >= 22) {
+					if (!getWorld()->personMoveFreely(this, getX(), getY()+2)) {
+						return;
+					}
 						setDirection(up);
 						moveTo(getX(), getY() + 2);
 						return;
-					}
+					//}
 				}
 				else {
+					//TODO: get rid of these checks???? 
 					//mofe left
-					if (getPenny()->getX() - getX() <= -22) {
+					if (!getWorld()->personMoveFreely(this, getX()-2, getY())) {
+						return;
+					}
 						setDirection(left);
 						moveTo(getX() - 2, getY());
 						return;
-					}
+					//}
 				}
 			}
 
@@ -360,54 +370,67 @@ void Citizen::doSomething() {
 		else {
 			//move right
 			if (diffY > 0) {
-				//move down
-				//this is down left 
-				//std::cout << "right down" << std::endl;
 				if (randThing == 0) {
 					//move down
-					//std::cout << "moving down" << std::endl;
-					std::cout << getY() - getPenny()->getY();
-						if (getY() - getPenny()->getY() >= 22) {
+					if (!getWorld()->personMoveFreely(this, getX(), getY() - 2)) {
+						return;
+					}
 							setDirection(down);
 							moveTo(getX(), getY() - 2);
 							return;
-						}
 				}
 				else {
-					//mofe right
-					if (getX() - getPenny()->getX() <= -22) {
+					//move right
+					if (!getWorld()->personMoveFreely(this, getX()+2, getY())) {
+						return;
+					}
 						setDirection(right);
 
 						moveTo(getX() + 2, getY());
 						return;
-					}
 
 				}
 			}
 			else {
 				//move up
 				//this is up left
-				std::cout << "right up" << std::endl;
 				if (randThing == 0) {
 					//move up
-					if (getPenny()->getY() - getY() >= 22) {
-						moveTo(getX(), getY() + 2);
+					if (!getWorld()->personMoveFreely(this, getX(), getY() +2)) {
 						return;
 					}
+						moveTo(getX(), getY() + 2);
+						return;
+					//}
 				}
 				else {
 					//mofe right
-					setDirection(right);
-					if (getX() - getPenny()->getX() <= -22) {
-						moveTo(getX() + 2, getY());
+					if (!getWorld()->personMoveFreely(this, getX()+2, getY())) {
 						return;
 					}
-
+					setDirection(right);
+						moveTo(getX() + 2, getY());
+						return;
 				}
-
 			}
 		}
 	}
+}
+
+bool Citizen::canExit()
+{
+	return true;
+}
+
+void Citizen::die()
+{
+	getWorld()->citizenDie();
+	Actor::die();
+}
+
+bool Citizen::fullBlock()
+{
+	return true;
 }
 
 Zombie::Zombie(int posX, int posY):Moving(IID_ZOMBIE, posX, posY, right, 0) {
@@ -446,6 +469,11 @@ bool Wall::blocker()
 	return true;
 }
 
+bool Wall::fullBlock()
+{
+	return true;
+}
+
 //Exits
 
 Exit::Exit(int posX, int posY, StudentWorld* world):Stationary(IID_EXIT, posX, posY, right, 1)
@@ -469,6 +497,16 @@ void Trap::doSomething()
 }
 
 bool Trap::canKill() {
+	return true;
+}
+
+bool Trap::blocker()
+{
+	return true;
+}
+
+bool Trap::isKillable()
+{
 	return true;
 }
 

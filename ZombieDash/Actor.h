@@ -10,6 +10,7 @@ public:
 	Actor(int imageID, double startX, double startY, StudentWorld* world, Direction dir = 0, int depth = 0, double size = 1.0);
 	virtual void doSomething() = 0;
 	virtual bool blocker();
+	virtual bool fullBlock();
 	virtual bool isExit();
 	virtual bool canKill();
 	virtual bool isAlive();
@@ -39,6 +40,7 @@ public:
 	virtual void setWorld(StudentWorld* world);
 	virtual Actor* getPenny();
 	virtual void setPenny(Actor* p);
+	virtual bool canExit();
 private:
 	bool living;
 	int numInfected;
@@ -77,6 +79,9 @@ class Citizen : public Moving {
 public:
 	Citizen(int posX, int posY, StudentWorld* world, Actor* penny);
 	virtual void doSomething();
+	virtual bool canExit();
+	virtual void die();
+	virtual bool fullBlock();
 private:
 	int dist_p;
 	int dist_z;
@@ -113,6 +118,7 @@ class Wall : public Stationary {
 public:
 	Wall(int posX, int posY, StudentWorld* world);
 	virtual bool blocker();
+	virtual bool fullBlock();
 private:
 };
 
@@ -127,6 +133,8 @@ public:
 	Trap(int posX, int posY, StudentWorld* world);
 	virtual void doSomething();
 	virtual bool canKill();
+	virtual bool blocker();
+	virtual bool isKillable();
 };
 
 class Flame : public Stationary {

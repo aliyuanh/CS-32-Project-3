@@ -5,6 +5,7 @@
 #include <string>
 using namespace std;
 
+//TODO: make flames light up landmines
 GameWorld* createStudentWorld(string assetPath)
 {
 	//this is where everything is made 
@@ -22,7 +23,7 @@ StudentWorld::~StudentWorld()
 StudentWorld::StudentWorld(string assetPath)
 : GameWorld(assetPath)
 {
-	numLevel = 2;
+	numLevel = 4;
 	score = 0;
 	numInfected = 0;
 	numFlames = 0;
@@ -184,6 +185,9 @@ void StudentWorld::activateLandmine(int x, int y)
 		}
 
 	}
+	thing = new Trap(0, 0, this);
+	thing->moveTo(x, y);
+	entities.push_back(thing);
 
 
 }
@@ -204,6 +208,7 @@ void StudentWorld::fire(int x, int y, Direction dir) {
 				break;
 			}
 			else {
+				thing->setDirection(GraphObject::left);
 				entities.push_back(thing);
 			}
 		}
@@ -218,6 +223,7 @@ void StudentWorld::fire(int x, int y, Direction dir) {
 				break;
 			}
 			else {
+				thing->setDirection(GraphObject::right);
 				entities.push_back(thing);
 			}
 		}
@@ -232,6 +238,7 @@ void StudentWorld::fire(int x, int y, Direction dir) {
 				break;
 			}
 			else {
+				thing->setDirection(GraphObject::up);
 				entities.push_back(thing);
 			}
 		}
@@ -246,6 +253,7 @@ void StudentWorld::fire(int x, int y, Direction dir) {
 				break;
 			}
 			else {
+				thing->setDirection(GraphObject::down);
 				entities.push_back(thing);
 			}
 		}
@@ -328,12 +336,51 @@ bool StudentWorld::checkObjectOverlap(Actor * p)
 			if ((*it)->blocker()) {
 				return true;
 			}
-
+			if ((*it)->isExit() && p->canExit()) {
+				p->die();
+				playSound(SOUND_CITIZEN_SAVED);
+				return true;
+			}
 		}
 
 	}
 
 	return false;
+}
+
+bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
+{
+	//check walls and penny 
+	for (list<Actor*>::iterator it = entities.begin(); it != entities.end(); it++) {
+		if ((*it) == p) {
+			continue;
+		}
+		int diffX = abs(x - (*it)->getX());
+		int diffY = abs(y - (*it)->getY());
+		if (diffX * diffX + diffY * diffY <= 256) {
+			if ((*it)->canKill()) {
+				std::cout << "killing something" << endl;
+				p->die();
+				return false;
+			}
+			if ((*it)->fullBlock()) {
+				return false;
+			}
+		}
+
+	}
+	int pennX = abs(x - (penny)->getX()) - 4;
+	int pennY = abs(y - (penny)->getY()) - 4;
+	if (pennX * pennX + pennY * pennY <= 100) {
+		return false;
+	}
+
+	return true;
+}
+
+void StudentWorld::citizenDie()
+{
+	numCitizensToSave--;
 }
 
 bool StudentWorld::checkCollision(int x, int y) {

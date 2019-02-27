@@ -116,7 +116,10 @@ int StudentWorld::init()
 	for (list<Actor*>::iterator it = entities.begin(); it != entities.end(); it++) {
 		(*it)->setPenny(penny);
 	}
-
+	Actor* vom = new Vomit(5, 5, this);
+	entities.push_back(vom);
+	//vom = new VaccineGoodie(6, 6, this);
+	//entities.push_back(vom);
     return GWSTATUS_CONTINUE_GAME;
 }
 
@@ -274,7 +277,7 @@ bool StudentWorld::checkKillable(int x, int y) {
 				//if it can be killed and it's a blocker (ie a citizen or a zombie), make the thing
 				return true;
 			}
-			else if ((*it)->blocker()) {
+			else if ((*it)->fullBlock()) {
 				//if it blocks stuff, don't make the thing
 				return false;
 			}
@@ -328,7 +331,7 @@ bool StudentWorld::checkObjectOverlap(Actor * p)
 		}
 		int diffX = abs(p->getX() - (*it)->getX()) - 4;
 		int diffY = abs(p->getY() - (*it)->getY()) - 4;
-		if (diffX * diffX + diffY * diffY <= 100) {
+		if (diffX * diffX + diffY * diffY <= 144) {
 			if ((*it)->canKill()) {
 				p->die();
 				return true;
@@ -364,8 +367,11 @@ bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
 				return false;
 			}
 			if ((*it)->fullBlock()) {
-				cout << "something be blockign me!" << endl;
+				//cout << "something be blockign me!" << endl;
 				return false;
+			}
+			if ((*it)->canInfect()) {
+				p->infect();
 			}
 		}
 
@@ -414,6 +420,11 @@ bool StudentWorld::checkCollision(int x, int y) {
 				penny->die();
 				return true;
 			}
+			//vomit!
+			if ((*it)->canInfect()) {
+				//cout << "INFECTING PENNYYYY" << endl;
+				penny->infect();
+			}
 			//goodies!
 			if ((*it)->canPickUp()) {
 				//cerr << "it's a goodie boi " << endl;
@@ -436,7 +447,6 @@ bool StudentWorld::checkCollision(int x, int y) {
 			if ((*it)->isExit() && numCitizensToSave == 0) {
 				nextLevel();
 				return true;
-
 			}
 			if ((*it)->canExplode()) {
 				(*it)->explode();

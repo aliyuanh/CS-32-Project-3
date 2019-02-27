@@ -64,6 +64,10 @@ bool Actor::canHeal()
 {
 	return false;
 }
+bool Actor::canInfect()
+{
+	return false;
+}
 int Actor::numberInfected()
 {
 	return numInfected;
@@ -114,6 +118,7 @@ void Actor::giveVaccines()
 void Actor::cure()
 {
 	isInfected = false;
+	numInfected = 0;
 }
 
 void Actor::fireFlame()
@@ -161,6 +166,14 @@ bool Actor::canExit()
 }
 
 void Penelope::doSomething() {
+	if (testInfected()) {
+		incrementInfect();
+	}
+	if (numberInfected() > 500) {
+		die();
+		return;
+	}
+
 	int theKey = -999;
 	getWorld()->getKey(theKey);
 	bool moving = false;
@@ -195,6 +208,7 @@ void Penelope::doSomething() {
 		getWorld()->placeLandmine(toX, toY);
 		break;
 	case KEY_PRESS_ENTER:
+		cure();
 		break;
 	default:
 		break;
@@ -236,7 +250,9 @@ Citizen::Citizen(int posX, int posY, StudentWorld* world, Actor* penny):Moving(I
 void Citizen::doSomething() {
 	//TODO: check for collisions with zambies!!1
 	incrementTicks();
-	getWorld()->checkObjectOverlap(this);
+	if (getWorld()->checkObjectOverlap(this)) {
+		return;
+	}
 	if (!isAlive()) {
 		//std::cout << "I, a citizen, am dead" << std::endl;
 		getWorld()->citizenDie();
@@ -432,11 +448,19 @@ Zombie::Zombie(int posX, int posY):Moving(IID_ZOMBIE, posX, posY, right, 0) {
 
 }
 
+
+
 DumbZombie::DumbZombie(int posX, int posY, StudentWorld* world) : Zombie(posX, posY) {
 	setWorld(world);
 }
 
 void DumbZombie::doSomething() {
+	if (!isAlive()) {
+		return;
+	}
+	if (numTicksHere() % 2 == 0) {
+		return;
+	}
 
 }
 
@@ -587,17 +611,41 @@ Mine::Mine(int x, int y, StudentWorld * world):Stationary(IID_LANDMINE,x,y,right
 void Mine::doSomething()
 {
 	incrementTicks();
+	getWorld()->checkObjectOverlap(this);
+
 }
 
 void Mine::explode()
 {
 	if (numTicksHere() >= 30) {
 		getWorld()->activateLandmine(getX(), getY());
-		die();
 	}
 }
 
 bool Mine::canExplode()
 {
 	return true;
+}
+
+void Mine::die()
+{
+	explode();
+	Actor::die();
+}
+
+Vomit::Vomit(int posX, int posY, StudentWorld * world) :Stationary(IID_VOMIT, posX, posY, right, 1)
+{
+	setWorld(world);
+	ticksAlive = 0;
+}
+
+bool Vomit::canInfect()
+{
+	return true;
+}
+
+void Vomit::doSomething()
+{
+	ticksAlive++;
+	//if(ticksAlive>2) die();
 }

@@ -21,6 +21,7 @@ public:
 	virtual bool canExplode();
 	virtual bool canDrop();
 	virtual bool canHeal();
+	virtual bool canInfect();
 	virtual int numberInfected();
 	virtual void incrementInfect();
 	virtual bool testInfected();
@@ -91,7 +92,6 @@ private:
 class Zombie :public Moving {
 public:
 	Zombie(int posX, int posY);
-
 };
 class DumbZombie : public Zombie {
 public: 
@@ -152,6 +152,7 @@ public:
 	virtual void doSomething();
 	virtual void explode();
 	virtual bool canExplode();
+	virtual void die();
 private:
 	int numTicksAlive;
 };
@@ -181,7 +182,14 @@ public:
 	virtual bool canHeal();
 };
 
-
+class Vomit :public Stationary {
+public:
+	Vomit(int posX, int posY, StudentWorld* world);
+	virtual bool canInfect();
+	virtual void doSomething();
+private:
+	int ticksAlive;
+};
 
 //TODO: add Trap class (landmines, pits, flames, vomit)
 //possibly make Object class for traps and goodies? + Walls and objects 

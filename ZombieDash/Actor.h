@@ -11,6 +11,7 @@ public:
 	virtual void doSomething() = 0;
 	virtual bool blocker();
 	virtual bool fullBlock();
+	virtual bool blocksVomit();
 	virtual bool isExit();
 	virtual bool canKill();
 	virtual bool isAlive();
@@ -97,6 +98,8 @@ class DumbZombie : public Zombie {
 public: 
 	DumbZombie(int posX, int posY, StudentWorld* world);
 	virtual void doSomething();
+private:
+	int movementPlan;
 };
 
 class SmartZombie : public Zombie {
@@ -119,6 +122,7 @@ public:
 	Wall(int posX, int posY, StudentWorld* world);
 	virtual bool blocker();
 	virtual bool fullBlock();
+	virtual bool blocksVomit();
 private:
 };
 
@@ -135,6 +139,7 @@ public:
 	virtual bool canKill();
 	virtual bool blocker();
 	virtual bool isKillable();
+	virtual bool blocksVomit();
 };
 
 class Flame : public Stationary {

@@ -23,7 +23,7 @@ StudentWorld::~StudentWorld()
 StudentWorld::StudentWorld(string assetPath)
 : GameWorld(assetPath)
 {
-	numLevel = 4;
+	numLevel = 5;
 	score = 0;
 	numInfected = 0;
 	numFlames = 0;
@@ -116,10 +116,11 @@ int StudentWorld::init()
 	for (list<Actor*>::iterator it = entities.begin(); it != entities.end(); it++) {
 		(*it)->setPenny(penny);
 	}
+	//TODO: remove AFTER testing 
 	Actor* vom = new Vomit(5, 5, this);
 	entities.push_back(vom);
-	//vom = new VaccineGoodie(6, 6, this);
-	//entities.push_back(vom);
+	vom = new DumbZombie(6, 6, this);
+	entities.push_back(vom);
     return GWSTATUS_CONTINUE_GAME;
 }
 
@@ -388,6 +389,45 @@ bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
 void StudentWorld::citizenDie()
 {
 	numCitizensToSave--;
+}
+
+bool StudentWorld::canVomitHere(int x, int y, Actor* p )
+{
+	//check for if it's a wall or trap -> return false 
+	bool foundThing = false;
+	for (list<Actor*>::iterator it = entities.begin(); it != entities.end(); it++) {
+		if ((*it)  == p) {
+			continue;
+		}
+		int diffX = (*it)->getX() - x;
+		int diffY = (*it)->getY() - y;
+		if (diffX*diffX + diffY * diffY <= 256) {
+			if ((*it)->blocksVomit()) {
+				return false;
+			}
+			cout << "found a boi to vomit on!" << endl;
+			cout << diffX << "," << diffY << endl;
+			foundThing = true;
+		}
+	}
+	int pennX = penny->getX() - x;
+	int pennY = penny->getY() - y;
+	if (pennX * pennX + pennY * pennY <= 256) {
+		return true;
+	}
+
+	if (foundThing) {
+		return true;
+	}
+	return false;
+}
+
+void StudentWorld::vomitHere(int x, int y)
+{
+	//make vomit here
+	Actor* thing = new Vomit(0, 0, this);
+	thing->moveTo(x, y);
+	entities.push_back(thing);
 }
 
 bool StudentWorld::checkCollision(int x, int y) {

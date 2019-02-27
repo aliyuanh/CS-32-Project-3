@@ -30,7 +30,8 @@ public:
 	bool checkObjectOverlap(Actor* p);
 	bool personMoveFreely(Actor* p, int x, int y);
 	void citizenDie();
-
+	bool canVomitHere(int x, int y, Actor*p);
+	void vomitHere(int x, int y);
 private:
 	//vector<Actor*> peeps;
 	Actor* penny;

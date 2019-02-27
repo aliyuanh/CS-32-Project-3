@@ -24,6 +24,11 @@ bool Actor::fullBlock()
 	return false;
 }
 
+bool Actor::blocksVomit()
+{
+	return false;
+}
+
 bool Actor::isExit()
 {
 	return false;
@@ -452,14 +457,47 @@ Zombie::Zombie(int posX, int posY):Moving(IID_ZOMBIE, posX, posY, right, 0) {
 
 DumbZombie::DumbZombie(int posX, int posY, StudentWorld* world) : Zombie(posX, posY) {
 	setWorld(world);
+	movementPlan = 0;
 }
 
 void DumbZombie::doSomething() {
+	incrementTicks();
 	if (!isAlive()) {
 		return;
 	}
 	if (numTicksHere() % 2 == 0) {
 		return;
+	}
+	//determine coordinates of the (possible) vomit)
+	int vomX = getX();
+	int vomY = getY();
+	Direction myDir = getDirection();
+	switch (myDir) {
+		case right:
+			vomX += SPRITE_WIDTH;
+			break;
+		case left:
+			vomX -= SPRITE_WIDTH;
+			break;
+		case down:
+			vomY -= SPRITE_HEIGHT;
+			break;
+		case up:
+			vomY += SPRITE_HEIGHT;
+			break;
+		default:
+			std::cout << "error!" << std::endl;
+			break;
+	}
+	//check for if there's a person in front  
+	if (getWorld()->canVomitHere(vomX, vomY, this) ) {
+		int chanceVomit = randInt(1, 3);
+		//if it vomits, then immediately return. otherwise, move n shit 
+		if (chanceVomit == 1) {
+			getWorld()->playSound(SOUND_ZOMBIE_VOMIT);
+			getWorld()->vomitHere(vomX, vomY);
+			return;
+		}
 	}
 
 }
@@ -489,6 +527,11 @@ bool Wall::blocker()
 }
 
 bool Wall::fullBlock()
+{
+	return true;
+}
+
+bool Wall::blocksVomit()
 {
 	return true;
 }
@@ -525,6 +568,11 @@ bool Trap::blocker()
 }
 
 bool Trap::isKillable()
+{
+	return true;
+}
+
+bool Trap::blocksVomit()
 {
 	return true;
 }
@@ -647,5 +695,6 @@ bool Vomit::canInfect()
 void Vomit::doSomething()
 {
 	ticksAlive++;
-	//if(ticksAlive>2) die();
+	if(ticksAlive>2) 
+		die();
 }

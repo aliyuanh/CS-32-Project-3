@@ -238,7 +238,8 @@ void Citizen::doSomething() {
 	incrementTicks();
 	getWorld()->checkObjectOverlap(this);
 	if (!isAlive()) {
-		std::cout << "I, a citizen, am dead" << std::endl;
+		//std::cout << "I, a citizen, am dead" << std::endl;
+		getWorld()->citizenDie();
 		return;
 	}
 	if (testInfected()) {
@@ -250,7 +251,6 @@ void Citizen::doSomething() {
 		return;
 	}
 	if (numTicksHere() % 2 == 0) {
-		//std::cout << "do nothing" << std::endl;
 		return;
 	}
 	if (pene == nullptr) {
@@ -268,48 +268,44 @@ void Citizen::doSomething() {
 		//if they're on the same "column"
 		if (diffX == 0) {
 			if (diffY > 0) {
+				if (!getWorld()->personMoveFreely(this, getX(), getY() - 2)) {
+					return;
+				}
 				setDirection(down);
-				if (!getWorld()->checkCollision(getX(), getY())-2) {
-					if (getY()-getPenny()->getY() >=18) {
 						moveTo(getX(), getY() - 2);
 						return;
-					}
-				}
+					
+				
 			}
 			else {
 				setDirection(up);
-				if (!getWorld()->checkCollision(getX(), getY()) + 2) {
-					if (getPenny()->getY() - getY() >= 22) {
+				if (!getWorld()->personMoveFreely(this, getX(), getY() + 2)) {
+					return;
+				}
 						moveTo(getX(), getY() + 2);
 						return;
-					}
-				}
+					
+				
 			}
 		}
 		//if they're on the same "row"
 		if (diffY == 0) {
 			if (diffX > 0) {
-				if (!getWorld()->checkCollision(getX() - 2, getY())) {
-					std::cout << "am blocked" << std::endl;
+				if (!getWorld()->personMoveFreely(this, getX()-2, getY())) {
 					return;
 				}
-					if (getPenny()->getX() - getX() <= -18) {
 						setDirection(left);
-
 						moveTo(getX() - 2, getY());
 						return;
-					}
 			}
 			else {
-				if (!getWorld()->checkCollision(getX() + 2, getY())) {
-					std::cout << "am blocked" << std::endl;
+				if (!getWorld()->personMoveFreely(this, getX()+2, getY())) {
 					return;
 				}
-				if (getX() - getPenny()->getX() <= -18) {
 						setDirection(right);
 						moveTo(getX() + 2, getY());
 						return;
-				}
+				
 				
 			}
 		}
@@ -424,7 +420,6 @@ bool Citizen::canExit()
 
 void Citizen::die()
 {
-	getWorld()->citizenDie();
 	Actor::die();
 }
 
@@ -592,11 +587,6 @@ Mine::Mine(int x, int y, StudentWorld * world):Stationary(IID_LANDMINE,x,y,right
 void Mine::doSomething()
 {
 	incrementTicks();
-	//if (numTicksAlive >= 30) {
-		//getWorld()->activateLandmine(getX(), getY());
-		//die();
-	//}
-	
 }
 
 void Mine::explode()

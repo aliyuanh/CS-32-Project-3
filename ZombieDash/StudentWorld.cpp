@@ -357,13 +357,14 @@ bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
 		}
 		int diffX = abs(x - (*it)->getX());
 		int diffY = abs(y - (*it)->getY());
-		if (diffX * diffX + diffY * diffY <= 256) {
+		if (diffX * diffX + diffY * diffY <= 144) {
 			if ((*it)->canKill()) {
-				std::cout << "killing something" << endl;
+				//std::cout << "killing something" << endl;
 				p->die();
 				return false;
 			}
 			if ((*it)->fullBlock()) {
+				cout << "something be blockign me!" << endl;
 				return false;
 			}
 		}
@@ -371,7 +372,7 @@ bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
 	}
 	int pennX = abs(x - (penny)->getX()) - 4;
 	int pennY = abs(y - (penny)->getY()) - 4;
-	if (pennX * pennX + pennY * pennY <= 100) {
+	if (pennX * pennX + pennY * pennY <= 144) {
 		return false;
 	}
 
@@ -390,9 +391,9 @@ bool StudentWorld::checkCollision(int x, int y) {
 	for (list<Actor*>::iterator it = entities.begin(); it != entities.end(); it++) {
 	//check every entitity against those 
 		//later, check to make sure it's one of Zombie, Wall, or Citizen 
-		if (abs(x - (*it)->getX()) * abs(x - (*it)->getX()) + abs(y - (*it)->getY())*abs(y - (*it)->getY()) <= 100 && (*it)->canKill()) {
+		if (abs(x - (*it)->getX()) * abs(x - (*it)->getX()) + abs(y - (*it)->getY())*abs(y - (*it)->getY()) <= 144 && (*it)->canKill()) {
 			penny->die();
-			cout << "penny died to flames" << endl;
+			cout << "penny died" << endl;
 			return true;
 		}
 		int diffX = abs(x - (*it)->getX()) - 4;
@@ -405,7 +406,7 @@ bool StudentWorld::checkCollision(int x, int y) {
 			//upper right corner checker
 			return true;
 		}
-		if (diffX * diffX + diffY*diffY <= 100) {
+		if (diffX * diffX + diffY*diffY < 144) {
 			//cout << "collision happening!" << endl;
 			//cerr << "collided w something" << endl;
 			if ((*it)->canKill()) {
@@ -429,13 +430,10 @@ bool StudentWorld::checkCollision(int x, int y) {
 				score += 50;
 				(*it)->die();
 			}
-
-
 			if ((*it)->blocker()) {
 				return true;
 			}
 			if ((*it)->isExit() && numCitizensToSave == 0) {
-				//cout << "yay! onto the next level!" << endl;
 				nextLevel();
 				return true;
 

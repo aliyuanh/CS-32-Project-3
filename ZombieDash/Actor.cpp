@@ -124,6 +124,7 @@ void Actor::cure()
 {
 	if (numVaccines > 0) {
 		isInfected = false;
+		numVaccines--;
 		numInfected = 0;
 	}
 }
@@ -214,7 +215,7 @@ void Penelope::doSomething() {
 		moving = true;
 		break;
 	case KEY_PRESS_SPACE:
-		std::cout << "firing!" << std::endl;
+		//std::cout << "firing!" << std::endl;
 		getWorld()->fire(toX, toY, getDirection());
 		break;
 	case KEY_PRESS_TAB:
@@ -283,7 +284,7 @@ void Citizen::doSomething() {
 		return;
 	}
 	if (pene == nullptr) {
-		std::cout << "oh no penny does not exist :(" << std::endl;
+		//std::cout << "oh no penny does not exist :(" << std::endl;
 		return;
 	}
 	dist_p = (getX() - getPenny()->getX()) * (getX() - getPenny()->getX()) + (getY() - getPenny()->getY()) * (getY() - getPenny()->getY());
@@ -495,7 +496,7 @@ void DumbZombie::doSomething() {
 			vomY += SPRITE_HEIGHT;
 			break;
 		default:
-			std::cerr << "error!" << std::endl;
+			//std::cerr << "error!" << std::endl;
 			break;
 	}
 	//check for if there's a person in front  
@@ -553,15 +554,14 @@ void DumbZombie::doSomething() {
 		}
 	}
 	if (getWorld()->personMoveFreely(this, toX, toY) && !getWorld()->checkObjectOverlap(this)) {
-		moveTo(toX, toY);
-		//std::cout << "I can move sooo free" << std::endl;
-		//std::cout << "decrementing!" << std::endl;
+		//moveTo(toX, toY);
 		movementPlan--;
 	}
 	else {
 		//std::cout << "yo im be blocced" << std::endl;
 		//moveTo(getX(), getY());
 		movementPlan = 0;
+		return;
 	}
 }
 
@@ -624,7 +624,6 @@ void SmartZombie::doSomething() {
 		vomY += SPRITE_HEIGHT;
 		break;
 	default:
-		std::cerr << "error!" << std::endl;
 		break;
 	}
 	//check for if there's a person in front  
@@ -638,21 +637,30 @@ void SmartZombie::doSomething() {
 		}
 	}
 	if (movementPlan <= 0) {
+		//std::cout << "a new movement plan" << std::endl;
 		movementPlan = randInt(3, 10);
 		if (!getWorld()->faceThisWay(this, myDir)) {
+			std::cout << "randomizing!" << std::endl;
 			int randBoi = randInt(1, 4);
 			switch (randBoi) {
 			case 1:
 				setDirection(right);
+				std::cout << "set dir" << std::endl;
 				break;
 			case 2:
 				setDirection(left);
+				std::cout << "set dir" << std::endl;
+
 				break;
 			case 3:
 				setDirection(up);
+				std::cout << "set dir" << std::endl;
+
 				break;
 			case 4:
 				setDirection(down);
+				std::cout << "set dir" << std::endl;
+
 				break;
 			}
 		}
@@ -660,9 +668,9 @@ void SmartZombie::doSomething() {
 			setDirection(myDir);
 		}
 	}
-	movementPlan--;
+	//movementPlan--;
 	myDir = getDirection();
-	std::cout << myDir <<std::endl;
+	//std::cout << myDir <<std::endl;
 	int toX = getX();
 	int toY = getY();
 	switch (myDir) {

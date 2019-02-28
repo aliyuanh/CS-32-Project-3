@@ -401,7 +401,7 @@ bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
 		}
 		int diffX = abs(x - (*it)->getX());
 		int diffY = abs(y - (*it)->getY());
-		if (diffX * diffX + diffY * diffY < 256) {
+		if (diffX * diffX + diffY * diffY < SPRITE_WIDTH*SPRITE_HEIGHT) {
 			//cout << (*it)->getX() << " vs " << x<<endl;
 			//cout << (*it)->getY() << " vs " << y<<endl;
 
@@ -414,7 +414,7 @@ bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
 				p->die();
 				return false;
 			}
-			if ((*it)->fullBlock()) {
+			if ((*it)->fullBlock() || (*it)->canVomit()) {
 				return false;
 			}
 			if ((*it)->canInfect()) {
@@ -448,8 +448,9 @@ bool StudentWorld::canVomitHere(int x, int y, Actor* p )
 		}
 		int diffX = (*it)->getX() - p->getX();
 		int diffY = (*it)->getY() - p->getY();
-		if (diffX*diffX + diffY * diffY < 256) {
+		if (diffX*diffX + diffY * diffY <= 16*16) {
 			if ((*it)->blocksVomit() || (*it)->canKill()) {
+				cout << "yo don't vomit here" << endl;
 				return false;
 			}
 			//cout << "found a boi to vomit on!" << endl;
@@ -474,7 +475,15 @@ void StudentWorld::vomitHere(int x, int y)
 	//make vomit here
 	Actor* thing = new Vomit(0, 0, this);
 	thing->moveTo(x, y);
-	entities.push_back(thing);
+	if (checkObjectOverlap(thing)) {
+		delete thing;
+	}
+	else {
+		entities.push_back(thing);
+		playSound(SOUND_ZOMBIE_VOMIT);
+
+	}
+
 }
 
 void StudentWorld::increaseScore(int num)
@@ -546,7 +555,7 @@ Direction StudentWorld::faceThisWay(Actor * p)
 	int pennX = p->getX() - penny->getX();
 	int pennY = p->getY() - penny->getY();
 	if (pennX * pennX + pennY * pennY < 80 * 80 && pennX * pennX + pennY * pennY < smallestDistance) {
-		cout << "penny be close by" << endl;
+		//cout << "penny be close by" << endl;
 		//cout << smallestDistance << endl;
 		if (pennX == 0) {//same row 
 			if (pennY > 0) {

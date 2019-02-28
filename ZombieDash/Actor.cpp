@@ -122,8 +122,10 @@ void Actor::giveVaccines()
 
 void Actor::cure()
 {
-	isInfected = false;
-	numInfected = 0;
+	if (numVaccines > 0) {
+		isInfected = false;
+		numInfected = 0;
+	}
 }
 
 void Actor::fireFlame()
@@ -501,7 +503,7 @@ void DumbZombie::doSomething() {
 		int chanceVomit = randInt(1, 3);
 		//if it vomits, then immediately return. otherwise, move n shit 
 		if (chanceVomit == 1) {
-			getWorld()->playSound(SOUND_ZOMBIE_VOMIT);
+			//getWorld()->playSound(SOUND_ZOMBIE_VOMIT);
 			getWorld()->vomitHere(vomX, vomY);
 			return;
 		}
@@ -630,7 +632,7 @@ void SmartZombie::doSomething() {
 		int chanceVomit = randInt(1, 3);
 		//if it vomits, then immediately return. otherwise, move n shit 
 		if (chanceVomit == 1) {
-			getWorld()->playSound(SOUND_ZOMBIE_VOMIT);
+			//getWorld()->playSound(SOUND_ZOMBIE_VOMIT);
 			getWorld()->vomitHere(vomX, vomY);
 			return;
 		}
@@ -638,10 +640,34 @@ void SmartZombie::doSomething() {
 	if (movementPlan <= 0) {
 		movementPlan = randInt(3, 10);
 		setDirection(getWorld()->faceThisWay(this));
-		//std::cout << "changing direction" << std::endl;
 	}
 	movementPlan--;
-	//std::cout << "decrementing movement plan" << std::endl;
+	myDir = getDirection();
+	int toX = getX();
+	int toY = getY();
+	switch (myDir) {
+		case left:
+			toX -= 1;
+			break;
+		case right:
+			toX += 1;
+			break;
+		case up:
+			toY += 1;
+			break;
+		case down:
+			toY -= 1;
+			break;
+		default:
+			break;
+	}
+	if (getWorld()->personMoveFreely(this, toX, toY)) {
+		moveTo(toX, toY);
+		movementPlan--;
+	}
+	else {
+		movementPlan = 0;
+	}
 }
 bool SmartZombie::blocksVomit()
 {

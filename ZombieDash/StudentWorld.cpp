@@ -29,7 +29,7 @@ StudentWorld::~StudentWorld()
 StudentWorld::StudentWorld(string assetPath)
 : GameWorld(assetPath)
 {
-	numLevel = 3;
+	numLevel = 5;
 	numInfected = 0;
 	numFlames = 0;
 	numLandmines = 0;
@@ -381,7 +381,12 @@ void StudentWorld::turnCitizenToZombie(int x, int y)
 bool StudentWorld::checkObjectOverlap(Actor * p)
 {
 	//if this returns true, kill p
+
 	for (list<Actor*>::iterator it = entities.begin(); it != entities.end(); it++) {
+		if ((*it)->canInfect()) {
+			cout << "infecting!" << endl;
+			p->infect();
+		}
 		if ((*it) == p) {
 			continue;
 		}
@@ -418,6 +423,7 @@ bool StudentWorld::checkObjectOverlap(Actor * p)
 bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
 {
 	//check walls and penny 
+	bool valToReturn;
 	for (list<Actor*>::iterator it = entities.begin(); it != entities.end(); it++) {
 		if ((*it) == p) {
 			continue;
@@ -431,7 +437,11 @@ bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
 			if (diffX <= 15 && diffY <= 15 && diffX > 0 && diffY >0) {
 				//cout << "diffX: "<<diffX << endl;
 				//cout << "diffY: " << diffY << endl;
-				return false;
+				if ((*it)->canInfect()) {
+					cout << "infecting!" << endl;
+					p->infect();
+				}
+				valToReturn = false;
 			}
 		}
 		//lower left corner
@@ -439,6 +449,10 @@ bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
 
 
 		if (diffX * diffX + diffY * diffY < 256 && (diffX > 0 ||diffY >0)) {
+			if ((*it)->canBeInfected()) {
+				//cout << "infecting!" << endl;
+				(*it)->infect();
+			}
 			if ((*it)->canExplode()) {
 				(*it)->explode();
 			}
@@ -447,20 +461,18 @@ bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
 				playSound(SOUND_CITIZEN_SAVED);
 				citizenDie();
 				increaseScore(1000);
-				return false;
+				valToReturn = false;
 			}
 			if ((*it)->canKill()) {
 				p->die();
-				return false;
+				valToReturn = false;
 			}
 			if ((*it)->fullBlock() || (*it)->canVomit()) {
 
 				//cout << "blocky boi" << p->numTicksHere()<< endl;
-				return false;
+				valToReturn = false;
 			}
-			if ((*it)->canInfect()) {
-				p->infect();
-			}
+			
 			
 		}
 
@@ -468,10 +480,10 @@ bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
 	int pennX = abs(x - (penny)->getX()) - 4;
 	int pennY = abs(y - (penny)->getY()) - 4;
 	if (pennX * pennX + pennY * pennY <= 144) {
-		return false;
+		valToReturn = false;
 	}
 
-	return true;
+	return valToReturn;
 }
 
 void StudentWorld::citizenDie()
@@ -490,18 +502,9 @@ bool StudentWorld::canVomitHere(int x, int y, Actor* p )
 		int diffX = (*it)->getX() - p->getX();
 		int diffY = (*it)->getY() - p->getY();
 		if (diffX*diffX + diffY * diffY <= 16*16) {
-			//if ((*it)->canBeInfected()) {
-				//cout << "oh boi i can be infected" << endl;
-				//return true;
-			//}
 			if ((*it)->blocksVomit() || (*it)->canKill() || (*it)->canVomit()) {
-				//cout << "yo don't vomit here" << endl;
-				//return false;
 				continue;
 			}
-			
-			//cout << "found a boi to vomit on!" << endl;
-			//cout << diffX << "," << diffY << endl;
 			foundThing = true;
 		}
 	}

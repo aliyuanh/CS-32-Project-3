@@ -289,7 +289,9 @@ void Citizen::doSomething() {
 		return;
 	}
 	if (testInfected()) {
+		//std::cout << "incrementing infect" << std::endl;
 		incrementInfect();
+		//std::cout << numberInfected() << std::endl;
 	}
 	if (numberInfected() >= 500) {
 		die();
@@ -469,6 +471,12 @@ void Citizen::die()
 	getWorld()->citizenDie();
 	//getWorld()->playSound(SOUND_CITIZEN_DIE);
 	Actor::die();
+}
+
+void Citizen::infect()
+{
+	Actor::infect();
+	getWorld()->playSound(SOUND_CITIZEN_INFECTED);
 }
 
 bool Citizen::fullBlock()

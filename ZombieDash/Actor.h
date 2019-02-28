@@ -87,6 +87,7 @@ public:
 	virtual void doSomething();
 	virtual bool canExit();
 	virtual void die();
+	virtual void infect();
 	virtual bool fullBlock();
 	virtual bool canBeInfected();
 private:

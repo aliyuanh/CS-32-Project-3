@@ -32,7 +32,6 @@ public:
 	void citizenDie();
 	bool canVomitHere(int x, int y, Actor*p);
 	void vomitHere(int x, int y);
-	void increaseScore(int num);
 	bool faceThisWay(Actor*p, Direction& dir);
 private:
 	//vector<Actor*> peeps;

@@ -30,7 +30,6 @@ StudentWorld::StudentWorld(string assetPath)
 : GameWorld(assetPath)
 {
 	numLevel = 3;
-	score = 0;
 	numInfected = 0;
 	numFlames = 0;
 	numLandmines = 0;
@@ -172,7 +171,7 @@ int StudentWorld::move()
 	//pads strings 
 	ostringstream oss;
 	oss.fill('0');
-	oss << setw(6) << score;
+	oss << setw(6) << getScore();
 	oss.fill('0');
 	string padded = oss.str();
 	if (penny != nullptr) {
@@ -350,7 +349,7 @@ bool StudentWorld::checkExit(int x, int y) {
 		int diffY = abs(y - (*it)->getY()) - 4;
 		if (diffX * diffX + diffY * diffY <= 100) {
 			if ((*it)->isExit()) {
-				cout << "in check exit" << endl;
+				//cout << "in check exit" << endl;
 				//cout << "tryna make something on an exit :(" << endl;
 				//if it is an exit, say it is 
 				return true;
@@ -365,7 +364,7 @@ bool StudentWorld::checkExit(int x, int y) {
 void StudentWorld::turnCitizenToZombie(int x, int y)
 {
 	playSound(SOUND_ZOMBIE_BORN);
-	score -= 1000;
+	increaseScore(-1000);
 	int numRand = randInt(1,10);
 	Actor* thing;
 	if (numRand >= 1 && numRand <= 3) {
@@ -447,7 +446,7 @@ bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
 				p->Actor::die();
 				playSound(SOUND_CITIZEN_SAVED);
 				citizenDie();
-				score += 1000;
+				increaseScore(1000);
 				return false;
 			}
 			if ((*it)->canKill()) {
@@ -534,10 +533,6 @@ void StudentWorld::vomitHere(int x, int y)
 
 }
 
-void StudentWorld::increaseScore(int num)
-{
-	score += num;
-}
 
 bool StudentWorld::faceThisWay(Actor * p, Direction&dir)
 {
@@ -692,7 +687,7 @@ bool StudentWorld::checkCollision(int x, int y) {
 		//later, check to make sure it's one of Zombie, Wall, or Citizen 
 		if (abs(x - (*it)->getX()) * abs(x - (*it)->getX()) + abs(y - (*it)->getY())*abs(y - (*it)->getY()) <= 144 && (*it)->canKill()) {
 			penny->die();
-			cout << "penny died" << endl;
+			//cout << "penny died" << endl;
 			return true;
 		}
 		int diffX = abs(x - (*it)->getX()) - 4;
@@ -734,14 +729,14 @@ bool StudentWorld::checkCollision(int x, int y) {
 					penny->giveLandmines();
 				}
 				playSound(SOUND_GOT_GOODIE);
-				score += 50;
+				increaseScore(50);
 				(*it)->die();
 			}
 			if ((*it)->blocker()) {
 				return true;
 			}
 			if ((*it)->isExit() && numCitizensToSave == 0) {
-				cout << "at the next level lloading" << endl;
+				//cout << "at the next level lloading" << endl;
 				nextLevel();
 				return true;
 			}

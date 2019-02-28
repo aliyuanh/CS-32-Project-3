@@ -725,7 +725,7 @@ bool SmartZombie::canExit()
 }
 void SmartZombie::die()
 {
-	getWorld()->increaseScore(1000);
+	getWorld()->increaseScore(2000);
 	getWorld()->playSound(SOUND_ZOMBIE_DIE);
 
 	Actor::die();

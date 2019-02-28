@@ -105,6 +105,11 @@ int Actor::getVaccines()
 	return numVaccines;
 }
 
+bool Actor::canBeInfected()
+{
+	return false;
+}
+
 void Actor::giveFlames()
 {
 	numFlames += 5;
@@ -118,6 +123,11 @@ void Actor::giveLandmines()
 void Actor::giveVaccines()
 {
 	numVaccines += 1;
+}
+
+void Actor::useMine()
+{
+	numLandmines--;
 }
 
 void Actor::cure()
@@ -239,6 +249,12 @@ void Penelope::doSomething() {
 bool Penelope::canBeKilled()
 {
 	return true;
+}
+
+void Penelope::die()
+{
+	Actor::die();
+	getWorld()->playSound(SOUND_PLAYER_DIE);
 }
 
 //All Moving Things
@@ -456,6 +472,11 @@ void Citizen::die()
 }
 
 bool Citizen::fullBlock()
+{
+	return true;
+}
+
+bool Citizen::canBeInfected()
 {
 	return true;
 }
@@ -827,6 +848,7 @@ GasCan::GasCan(int posX, int posY,StudentWorld* world) : Goodie(IID_GAS_CAN_GOOD
 
 void GasCan::doSomething()
 {
+	getWorld()->checkObjectOverlap(this);
 }
 
 bool GasCan::canFire()
@@ -839,6 +861,7 @@ MineGoodie::MineGoodie(int posX, int posY, StudentWorld* world):Goodie(IID_LANDM
 	setWorld(world);
 }
 void MineGoodie::doSomething() {
+	getWorld()->checkObjectOverlap(this);
 
 }
 
@@ -853,6 +876,7 @@ VaccineGoodie::VaccineGoodie(int posX, int posY, StudentWorld* world):Goodie(IID
 }
 void VaccineGoodie::doSomething() {
 
+	getWorld()->checkObjectOverlap(this);
 
 }
 

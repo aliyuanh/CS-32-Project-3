@@ -8,6 +8,7 @@
 using namespace std;
 //TODO: sounds
 //TODO: scores 
+//TODO: goodies destroyed by flame 
 //TODO: format game text - fix 
 //TODO: smart zombies 
 //TODO: citizens run away from zombies 
@@ -28,7 +29,7 @@ StudentWorld::~StudentWorld()
 StudentWorld::StudentWorld(string assetPath)
 : GameWorld(assetPath)
 {
-	numLevel = 1;
+	numLevel = 3;
 	score = 0;
 	numInfected = 0;
 	numFlames = 0;
@@ -189,15 +190,17 @@ int StudentWorld::move()
    // return GWSTATUS_PLAYER_DIED;
 }
 void StudentWorld::placeLandmine(int x, int y) {
+	if (penny->getLandmines() <= 0) {
+		return;
+	}
 	Actor* thing = new Mine(0, 0, this);
+	
+	penny->useMine();
 	//made a new mine
 	if (checkExit(x, y)) {
-		//cout << "oof is on a place that isn't killable" << endl;
 		delete thing;
 	}
 	else {
-		//cout << "made a new mine!" << endl;
-
 		thing->moveTo(x, y);
 		entities.push_back(thing);
 	}
@@ -228,9 +231,10 @@ void StudentWorld::activateLandmine(int x, int y)
 }
 void StudentWorld::fire(int x, int y, Direction dir) {
 	if (penny->getFlames() <= 0) {
-		cout << "no flames left!" << endl;
+		//cout << "no flames left!" << endl;
 		return;
 	}
+	bool madeFlames = false;
 	Actor* thing;
 	switch (dir) {
 	case GraphObject::left:
@@ -239,11 +243,12 @@ void StudentWorld::fire(int x, int y, Direction dir) {
 			thing = new Flame(0 , 0,this);
 			thing->moveTo(x - ((i+1)*SPRITE_WIDTH), y);
 			if (!checkKillable(thing->getX()+4, thing->getY())) {
-				std::cout << "flames are blocked!" << endl;
+				//std::cout << "flames are blocked!" << endl;
 				delete thing;
 				break;
 			}
 			else {
+				madeFlames = true;
 				thing->setDirection(GraphObject::left);
 				entities.push_back(thing);
 			}
@@ -255,12 +260,13 @@ void StudentWorld::fire(int x, int y, Direction dir) {
 			thing = new Flame(0, 0,this);
 			thing->moveTo(x + ((i + 1) * SPRITE_WIDTH), y);
 			if (!checkKillable(thing->getX(), thing->getY())) {
-				std::cout << "flames are blocked!" << endl;
+				//std::cout << "flames are blocked!" << endl;
 				delete thing;
 				break;
 			}
 			else {
 				thing->setDirection(GraphObject::right);
+				madeFlames = true;
 				entities.push_back(thing);
 			}
 		}
@@ -271,13 +277,14 @@ void StudentWorld::fire(int x, int y, Direction dir) {
 			thing = new Flame(0, 0,this);
 			thing->moveTo(x, y + (i+1)*SPRITE_HEIGHT);
 			if (!checkKillable(thing->getX(), thing->getY())) {
-				std::cout << "flames are blocked!" << endl;
+				//std::cout << "flames are blocked!" << endl;
 				delete thing;
 				break;
 			}
 			else {
 				thing->setDirection(GraphObject::up);
 				entities.push_back(thing);
+				madeFlames = true;
 			}
 		}
 		break;
@@ -287,18 +294,22 @@ void StudentWorld::fire(int x, int y, Direction dir) {
 			thing = new Flame(0, 0,this);
 			thing->moveTo(x, y - (i + 1)*SPRITE_HEIGHT);
 			if (!checkKillable(thing->getX(), thing->getY())) {
-				std::cout << "flames are blocked!" << endl;
+				//std::cout << "flames are blocked!" << endl;
 				delete thing;
 				break;
 			}
 			else {
 				thing->setDirection(GraphObject::down);
 				entities.push_back(thing);
+				madeFlames = true;
 			}
 		}
 		break; 
 	default: 
 		break;
+	}
+	if (madeFlames) {
+		playSound(SOUND_PLAYER_FIRE);
 	}
 	penny->fireFlame();
 }
@@ -364,6 +375,7 @@ void StudentWorld::turnCitizenToZombie(int x, int y)
 		thing = new DumbZombie(0, 0, this);
 	}
 	thing->moveTo(x, y);
+	entities.push_back(thing);
 
 }
 
@@ -381,17 +393,20 @@ bool StudentWorld::checkObjectOverlap(Actor * p)
 				p->die();
 				return true;
 			}
-			if ((*it)->blocker()) {
-				return true;
-			}
+			
 			if ((*it)->isExit() && p->canExit()) {
-				cout << "here" << endl;
 				p->Actor::die();
 				playSound(SOUND_CITIZEN_SAVED);
 				citizenDie();
 				return true;
 			}
+			else if ((*it)->canExit()) {
+				return false;
+			}
 			if ((*it)->isExit()) {
+				return true;
+			}
+			if ((*it)->blocker() && !p->canExit()) {
 				return true;
 			}
 		}
@@ -431,6 +446,7 @@ bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
 			if ((*it)->isExit() && !p->canVomit()) {
 				p->Actor::die();
 				playSound(SOUND_CITIZEN_SAVED);
+				citizenDie();
 				score += 1000;
 				return false;
 			}
@@ -475,10 +491,16 @@ bool StudentWorld::canVomitHere(int x, int y, Actor* p )
 		int diffX = (*it)->getX() - p->getX();
 		int diffY = (*it)->getY() - p->getY();
 		if (diffX*diffX + diffY * diffY <= 16*16) {
-			if ((*it)->blocksVomit() || (*it)->canKill()) {
+			//if ((*it)->canBeInfected()) {
+				//cout << "oh boi i can be infected" << endl;
+				//return true;
+			//}
+			if ((*it)->blocksVomit() || (*it)->canKill() || (*it)->canVomit()) {
 				//cout << "yo don't vomit here" << endl;
-				return false;
+				//return false;
+				continue;
 			}
+			
 			//cout << "found a boi to vomit on!" << endl;
 			//cout << diffX << "," << diffY << endl;
 			foundThing = true;

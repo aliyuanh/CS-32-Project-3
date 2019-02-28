@@ -30,9 +30,11 @@ public:
 	virtual int getFlames();
 	virtual int getLandmines();
 	virtual int getVaccines();
+	virtual bool canBeInfected();
 	virtual void giveFlames();	
 	virtual void giveLandmines();
 	virtual void giveVaccines();
+	virtual void useMine();
 	virtual void cure();
 	virtual void fireFlame();
 	virtual void explode();
@@ -64,6 +66,7 @@ public:
 	}
 	virtual void doSomething();
 	virtual bool canBeKilled();
+	virtual void die();
 private:
 };
 
@@ -85,6 +88,7 @@ public:
 	virtual bool canExit();
 	virtual void die();
 	virtual bool fullBlock();
+	virtual bool canBeInfected();
 private:
 	int dist_p;
 	int dist_z;

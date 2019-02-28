@@ -34,6 +34,11 @@ bool Actor::isExit()
 	return false;
 }
 
+bool Actor::isBlockade()
+{
+	return false;
+}
+
 bool Actor::canKill() {
 	return false;
 }
@@ -264,6 +269,7 @@ Citizen::Citizen(int posX, int posY, StudentWorld* world, Actor* penny):Moving(I
 void Citizen::doSomething() {
 	//TODO: check for collisions with zambies!!1
 	incrementTicks();
+	getWorld()->checkObjectOverlap(this);
 	//if (getWorld()->checkObjectOverlap(this)) {
 		//return;
 	//}
@@ -459,6 +465,18 @@ bool Citizen::fullBlock()
 	return true;
 }
 
+void Citizen::infect()
+{
+	getWorld()->playSound(SOUND_CITIZEN_INFECTED);
+	Actor::infect();
+	
+}
+
+bool Citizen::blocksVomit()
+{
+	return false;
+}
+
 Zombie::Zombie(int posX, int posY):Moving(IID_ZOMBIE, posX, posY, right, 0) {
 
 }
@@ -594,6 +612,11 @@ bool DumbZombie::canVomit()
 	return true;
 }
 
+bool DumbZombie::isBlockade()
+{
+	return true;
+}
+
 SmartZombie::SmartZombie(int posX, int posY, StudentWorld* world) :Zombie(posX, posY) {
 	setWorld(world);
 	movementPlan = 0;
@@ -640,31 +663,30 @@ void SmartZombie::doSomething() {
 		//std::cout << "a new movement plan" << std::endl;
 		movementPlan = randInt(3, 10);
 		if (!getWorld()->faceThisWay(this, myDir)) {
-			std::cout << "randomizing!" << std::endl;
+			//std::cout << "moving randomly" <<std::endl;
+			std::cout << "face this way returned FALSE" << std::endl;
+
 			int randBoi = randInt(1, 4);
 			switch (randBoi) {
 			case 1:
 				setDirection(right);
-				std::cout << "set dir" << std::endl;
 				break;
 			case 2:
 				setDirection(left);
-				std::cout << "set dir" << std::endl;
 
 				break;
 			case 3:
 				setDirection(up);
-				std::cout << "set dir" << std::endl;
 
 				break;
 			case 4:
 				setDirection(down);
-				std::cout << "set dir" << std::endl;
 
 				break;
 			}
 		}
 		else {
+			std::cout << "face this way returned TRUE" << std::endl;
 			setDirection(myDir);
 		}
 	}
@@ -720,6 +742,10 @@ bool SmartZombie::canVomit()
 {
 	return true;
 }
+bool SmartZombie::isBlockade()
+{
+	return true;
+}
 //All Stationary Things
 Stationary::Stationary(int ID, double myX, double myY, Direction dir, int depth) :Actor(ID, SPRITE_WIDTH*myX, SPRITE_HEIGHT * myY,Actor::getWorld(), dir, depth, 1.0)
 {
@@ -744,6 +770,11 @@ bool Wall::fullBlock()
 }
 
 bool Wall::blocksVomit()
+{
+	return true;
+}
+
+bool Wall::isBlockade()
 {
 	return true;
 }
@@ -780,6 +811,11 @@ bool Trap::blocker()
 }
 
 bool Trap::isKillable()
+{
+	return true;
+}
+
+bool Trap::isBlockade()
 {
 	return true;
 }

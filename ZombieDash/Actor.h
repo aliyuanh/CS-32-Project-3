@@ -13,6 +13,7 @@ public:
 	virtual bool fullBlock();
 	virtual bool blocksVomit();
 	virtual bool isExit();
+	virtual bool isBlockade();
 	virtual bool canKill();
 	virtual bool isAlive();
 	virtual void die();
@@ -85,6 +86,8 @@ public:
 	virtual bool canExit();
 	virtual void die();
 	virtual bool fullBlock();
+	virtual void infect();
+	virtual bool blocksVomit();
 private:
 	int dist_p;
 	int dist_z;
@@ -104,6 +107,7 @@ public:
 	virtual bool canExit();
 	virtual void die();
 	virtual bool canVomit();
+	virtual bool isBlockade();
 private:
 	int movementPlan;
 };
@@ -117,6 +121,7 @@ public:
 	virtual bool canExit();
 	virtual void die();
 	virtual bool canVomit();
+	virtual bool isBlockade();
 private:
 	int movementPlan;
 
@@ -137,6 +142,7 @@ public:
 	virtual bool blocker();
 	virtual bool fullBlock();
 	virtual bool blocksVomit();
+	virtual bool isBlockade();
 private:
 };
 
@@ -153,6 +159,8 @@ public:
 	virtual bool canKill();
 	virtual bool blocker();
 	virtual bool isKillable();
+	virtual bool isBlockade();
+
 	virtual bool blocksVomit();
 };
 

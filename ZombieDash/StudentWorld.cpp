@@ -375,7 +375,10 @@ bool StudentWorld::checkObjectOverlap(Actor * p)
 				p->die();
 				return true;
 			}
-			if ((*it)->blocker()) {
+			if ((*it)->canInfect()) {
+				p->infect();
+			}
+			if ((*it)->isBlockade()) {
 				return true;
 			}
 			if ((*it)->isExit() && p->canExit()) {
@@ -400,19 +403,12 @@ bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
 		int diffX = abs(x - (*it)->getX()); //positive means left
 		int diffY = abs(y - (*it)->getY()); //positive means up 
 		//check corners!
-		//upper left corner
 		if ((*it)->fullBlock()) {
 			//accounts for corners 
 			if (diffX <= 15 && diffY <= 15 && diffX > 0 && diffY >0) {
-				//cout << "diffX: "<<diffX << endl;
-				//cout << "diffY: " << diffY << endl;
 				return false;
 			}
 		}
-		//lower left corner
-		//lower right corner 
-
-
 		if (diffX * diffX + diffY * diffY < 256 && (diffX > 0 ||diffY >0)) {
 			if ((*it)->canExplode()) {
 				(*it)->explode();
@@ -463,9 +459,18 @@ bool StudentWorld::canVomitHere(int x, int y, Actor* p )
 		int diffX = (*it)->getX() - p->getX();
 		int diffY = (*it)->getY() - p->getY();
 		if (diffX*diffX + diffY * diffY <= 16*16) {
-			if ((*it)->blocksVomit() || (*it)->canKill()) {
+			//cout << "sometin be close" << endl;
+			if ((*it)->isBlockade() ||( (*it)->canKill())) {
 				//cout << "yo don't vomit here" << endl;
+				if ((*it)->isBlockade()) {
+					//cout << "it is a blockade" << endl;
+					//return true;
+				}
+				else {
+					//cout << "it can kill!" << endl;
+				}
 				return false;
+				foundThing = false;
 			}
 			//cout << "found a boi to vomit on!" << endl;
 			//cout << diffX << "," << diffY << endl;
@@ -479,6 +484,7 @@ bool StudentWorld::canVomitHere(int x, int y, Actor* p )
 	}
 
 	if (foundThing) {
+		//cout << "returning true" << endl;
 		return true;
 	}
 	return false;
@@ -511,6 +517,7 @@ bool StudentWorld::faceThisWay(Actor * p, Direction&dir)
 	int diffX = 100000;
 	int diffY = 100000;
 	bool hasBeenChanged = false;
+	bool wasCloseBoi = false;
 	Direction toSet = GraphObject::right;
 	for (list<Actor*>::iterator it = entities.begin(); it != entities.end(); it++) {
 
@@ -521,12 +528,6 @@ bool StudentWorld::faceThisWay(Actor * p, Direction&dir)
 			toSet = p->getDirection();
 			continue;
 		}
-		if ((*it)->fullBlock()) {
-			continue;
-		}
-		if ((*it)->blocker()) {
-			continue;
-		}
 		if ((*it)->canPickUp()) {
 			continue;
 		}
@@ -534,34 +535,33 @@ bool StudentWorld::faceThisWay(Actor * p, Direction&dir)
 		diffX = p->getX() - (*it)->getY(); //positive means face left
 		diffY = p->getY() - (*it)->getX();//positive means face down
 		if (diffX * diffX + diffY * diffY < 80 * 80 && diffX * diffX + diffY * diffY < smallestDistance) {
+			if ((*it)->fullBlock()) {
+				wasCloseBoi = true;
+				continue;
+			}
+			hasBeenChanged = true;
 			smallestDistance = diffX * diffX + diffY * diffY;
 			if (diffX == 0) {//same row 
 				if (diffY > 0) {
 					toSet = GraphObject::down;
 					dir = GraphObject::down;
-					//cout << "changed to true on line " << 537 << endl;
-					//hasBeenChanged = true;
+					hasBeenChanged = true;
 				}
 				else if(diffY < 0) {
-					//hasBeenChanged = true;
-					//cout << "changed to true on line " << 541 << endl;
-
 					toSet = GraphObject::up;
+					hasBeenChanged = true;
+
 				}
 			}
 			else if (diffY == 0) {//same column 
 				if (diffX > 0) {
 					toSet = GraphObject::left;
-					//cout << "changed to true on line " << 550 << endl;
-
-					//hasBeenChanged = true;
+					hasBeenChanged = true;
 
 				}
 				else if(diffX<0){
 					toSet = GraphObject::right;
-					cout << "changed to true on line " << 557 << endl;
-
-					//hasBeenChanged = true;
+					hasBeenChanged = true;
 
 				}
 			}
@@ -570,13 +570,10 @@ bool StudentWorld::faceThisWay(Actor * p, Direction&dir)
 					if (diffX > 0) {
 						toSet = GraphObject::left;
 						hasBeenChanged = true;
-						cout << "changed to true on line " << 567 << endl;
-
 
 					}
 					else if(diffX<0) {
 						toSet = GraphObject::right;
-						cout << "changed to true on line " << 575 << endl;
 						hasBeenChanged = true;
 
 					}
@@ -584,16 +581,12 @@ bool StudentWorld::faceThisWay(Actor * p, Direction&dir)
 				else if (abs(diffX) < abs(diffY)) {//face vertically 
 					if (diffY > 0) {
 						toSet = GraphObject::down;
-						//cout << "changed to true on line " << 583 << endl;
-
-						//hasBeenChanged = true;
+						hasBeenChanged = true;
 
 					}
 					else if(diffY<0){
 						toSet = GraphObject::up;
-						//cout << "changed to true on line " << 589 << endl;
-
-						//hasBeenChanged = true;
+						hasBeenChanged = true;
 
 					}
 				}
@@ -608,31 +601,22 @@ bool StudentWorld::faceThisWay(Actor * p, Direction&dir)
 		if (pennX == 0) {//same row 
 			if (pennY > 0) {
 				toSet = GraphObject::down;
-				cout << "changed to true on line " << 606 << endl;
-
 				hasBeenChanged = true;
 
 			}
 			else if(pennY <0){
 				toSet = GraphObject::up;
-				//cout << "changed to true on line " << 613 << endl;
-
-				//hasBeenChanged = true;
-
+				hasBeenChanged = true;
 			}
 		}
 		else if (pennY == 0) {//same column 
 			if (pennX > 0) {
 				toSet = GraphObject::left;
-				cout << "changed to true on line " << 621 << endl;
-
 				hasBeenChanged = true;
 
 			}
 			else if(pennX < 0) {
 				toSet = GraphObject::right;
-				cout << "changed to true on line " << 631 << endl;
-
 				hasBeenChanged = true;
 
 			}
@@ -642,46 +626,37 @@ bool StudentWorld::faceThisWay(Actor * p, Direction&dir)
 				if (pennX > 0) {
 					toSet = GraphObject::left;
 					hasBeenChanged = true;
-					cout << "changed to true on line " << 640 << endl;
-
 
 				}
 				else if (pennX <0) {
 					toSet = GraphObject::right;
 					hasBeenChanged = true;
-					cout << "changed to true on line " << 646 << endl;
-
-
 				}
 			}
 			else {//face vertically 
 				if (pennY > 0) {
 					toSet = GraphObject::down;
 					hasBeenChanged = true;
-					cout << "changed to true on line " << 656 << endl;
-
-
 				}
 				else if(pennY < 0){
 					toSet = GraphObject::up;
-					//cout << "changed to true on line " << 662 << endl;
-
-					//hasBeenChanged = true;
-
+					hasBeenChanged = true;
 				}
 			}
 		}
 		if (pennX == 0 && pennY == 0) {
-			//cout << "same spot" << endl;
+			cout << "same spot" << endl;
 			hasBeenChanged = false;
 			return false;
 		}
+		return true;
 	}
+	dir = toSet;
+
 	if (!hasBeenChanged) {
 		cout << "has not been changed" << endl;
 		return false;
 	}
-	dir = toSet;
 
 	return true;
 }

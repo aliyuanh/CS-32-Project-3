@@ -26,7 +26,7 @@ StudentWorld::~StudentWorld()
 StudentWorld::StudentWorld(string assetPath)
 : GameWorld(assetPath)
 {
-	numLevel = 4;
+	numLevel = 5;
 	score = 0;
 	numInfected = 0;
 	numFlames = 0;
@@ -401,11 +401,11 @@ bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
 		}
 		int diffX = abs(x - (*it)->getX());
 		int diffY = abs(y - (*it)->getY());
-		if (diffX * diffX + diffY * diffY < SPRITE_WIDTH*SPRITE_HEIGHT) {
+		if (diffX * diffX + diffY * diffY <= SPRITE_WIDTH*SPRITE_HEIGHT) {
 			//cout << (*it)->getX() << " vs " << x<<endl;
 			//cout << (*it)->getY() << " vs " << y<<endl;
 
-			if ((*it)->isExit()) {
+			if ((*it)->isExit() && !p->canVomit()) {
 				p->die();
 				score += 1000;
 				return false;
@@ -415,6 +415,7 @@ bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
 				return false;
 			}
 			if ((*it)->fullBlock() || (*it)->canVomit()) {
+				//cout << "blocky boi" << endl;
 				return false;
 			}
 			if ((*it)->canInfect()) {
@@ -450,11 +451,11 @@ bool StudentWorld::canVomitHere(int x, int y, Actor* p )
 		int diffY = (*it)->getY() - p->getY();
 		if (diffX*diffX + diffY * diffY <= 16*16) {
 			if ((*it)->blocksVomit() || (*it)->canKill()) {
-				cout << "yo don't vomit here" << endl;
+				//cout << "yo don't vomit here" << endl;
 				return false;
 			}
 			//cout << "found a boi to vomit on!" << endl;
-			cout << diffX << "," << diffY << endl;
+			//cout << diffX << "," << diffY << endl;
 			foundThing = true;
 		}
 	}
@@ -491,11 +492,12 @@ void StudentWorld::increaseScore(int num)
 	score += num;
 }
 
-Direction StudentWorld::faceThisWay(Actor * p)
+bool StudentWorld::faceThisWay(Actor * p, Direction&dir)
 {
 	int smallestDistance = 10000000;
 	int diffX = 100000;
 	int diffY = 100000;
+	bool hasBeenChanged = false;
 	Direction toSet = GraphObject::right;
 	for (list<Actor*>::iterator it = entities.begin(); it != entities.end(); it++) {
 		if ((*it) == p) {
@@ -506,45 +508,65 @@ Direction StudentWorld::faceThisWay(Actor * p)
 			//std::cout << "can't do dis on a vomity boi" << endl;
 			continue;
 		}
+		if ((*it)->fullBlock()) {
+			continue;
+		}
 		diffX = p->getX() - (*it)->getY(); //positive means face left
 		diffY = p->getY() - (*it)->getX();//positive means face down
-		if (diffX * diffX + diffY * diffY < 80 * 80 || diffX * diffX + diffY * diffY < smallestDistance) {
+		if (diffX * diffX + diffY * diffY < 80 * 80 && diffX * diffX + diffY * diffY < smallestDistance) {
+			std::cout << "found someone to chase! " <<diffX << ","<<diffY<< endl;
 			//std::cout << "changing direction" << std::endl;
 			smallestDistance = diffX * diffX + diffY * diffY;
+			cout << smallestDistance << endl;
+
 			//cout << smallestDistance << endl;
 			if (diffX == 0) {//same row 
 				if (diffY > 0) {
 					toSet = GraphObject::down;
+					dir = GraphObject::down;
+					hasBeenChanged = true;
 				}
 				else {
-					cout << "auto to up" << endl;
-
+					//cout << "auto to up" << endl;
+					hasBeenChanged = true;
 					toSet = GraphObject::up;
 				}
 			}
 			else if (diffY == 0) {//same column 
 				if (diffX > 0) {
 					toSet = GraphObject::left;
+					hasBeenChanged = true;
+
 				}
 				else {
 					toSet = GraphObject::right;
+					hasBeenChanged = true;
+
 				}
 			}
 			else {//not same col or row 
 				if (abs(diffX) > abs(diffY)) {//face horizontally 
 					if (diffX > 0) {
 						toSet = GraphObject::left;
+						hasBeenChanged = true;
+
 					}
 					else {
 						toSet = GraphObject::right;
+						hasBeenChanged = true;
+
 					}
 				}
 				else {//face vertically 
 					if (diffY > 0) {
 						toSet = GraphObject::down;
+						hasBeenChanged = true;
+
 					}
 					else {
 						toSet = GraphObject::up;
+						hasBeenChanged = true;
+
 					}
 				}
 			}
@@ -560,42 +582,66 @@ Direction StudentWorld::faceThisWay(Actor * p)
 		if (pennX == 0) {//same row 
 			if (pennY > 0) {
 				toSet = GraphObject::down;
+				hasBeenChanged = true;
+
 			}
 			else {
 				toSet = GraphObject::up;
+				hasBeenChanged = true;
+
 			}
 		}
 		else if (pennY == 0) {//same column 
 			if (pennX > 0) {
 				toSet = GraphObject::left;
+				hasBeenChanged = true;
+
 			}
 			else {
 				toSet = GraphObject::right;
+				hasBeenChanged = true;
+
 			}
 		}
 		else {//not same col or row 
 			if (abs(pennX) > abs(pennY)) {//face horizontally 
 				if (pennX > 0) {
 					toSet = GraphObject::left;
+					hasBeenChanged = true;
+
 				}
 				else {
 					toSet = GraphObject::right;
+					hasBeenChanged = true;
+
 				}
 			}
 			else {//face vertically 
 				if (pennY > 0) {
 					toSet = GraphObject::down;
+					hasBeenChanged = true;
+
 				}
 				else {
 					toSet = GraphObject::up;
+					hasBeenChanged = true;
+
 				}
 			}
 		}
 		if (pennX == 0 && pennY == 0) {
-			toSet = p->getDirection();
+			cout << "same spot" << endl;
+			hasBeenChanged = false;
+			return false;
 		}
 	}
-	return toSet;
+	if (!hasBeenChanged) {
+		cout << "has not been changed" << endl;
+		return false;
+	}
+	dir = toSet;
+
+	return true;
 }
 
 bool StudentWorld::checkCollision(int x, int y) {

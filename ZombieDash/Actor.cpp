@@ -301,8 +301,8 @@ void Citizen::doSomething() {
 					return;
 				}
 				setDirection(down);
-						moveTo(getX(), getY() - 2);
-						return;
+				moveTo(getX(), getY() - 2);
+				return;
 					
 				
 			}
@@ -552,7 +552,7 @@ void DumbZombie::doSomething() {
 			break;
 		}
 	}
-	if (getWorld()->personMoveFreely(this, toX, toY)) {
+	if (getWorld()->personMoveFreely(this, toX, toY) && !getWorld()->checkObjectOverlap(this)) {
 		moveTo(toX, toY);
 		//std::cout << "I can move sooo free" << std::endl;
 		//std::cout << "decrementing!" << std::endl;
@@ -639,10 +639,30 @@ void SmartZombie::doSomething() {
 	}
 	if (movementPlan <= 0) {
 		movementPlan = randInt(3, 10);
-		setDirection(getWorld()->faceThisWay(this));
+		if (!getWorld()->faceThisWay(this, myDir)) {
+			int randBoi = randInt(1, 4);
+			switch (randBoi) {
+			case 1:
+				setDirection(right);
+				break;
+			case 2:
+				setDirection(left);
+				break;
+			case 3:
+				setDirection(up);
+				break;
+			case 4:
+				setDirection(down);
+				break;
+			}
+		}
+		else {
+			setDirection(myDir);
+		}
 	}
 	movementPlan--;
 	myDir = getDirection();
+	std::cout << myDir <<std::endl;
 	int toX = getX();
 	int toY = getY();
 	switch (myDir) {

@@ -33,7 +33,7 @@ public:
 	bool canVomitHere(int x, int y, Actor*p);
 	void vomitHere(int x, int y);
 	void increaseScore(int num);
-	Direction faceThisWay(Actor*p);
+	bool faceThisWay(Actor*p, Direction& dir);
 private:
 	//vector<Actor*> peeps;
 	Actor* penny;

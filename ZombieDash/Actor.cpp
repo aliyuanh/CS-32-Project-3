@@ -225,7 +225,6 @@ void Penelope::doSomething() {
 		moving = true;
 		break;
 	case KEY_PRESS_SPACE:
-		//std::cout << "firing!" << std::endl;
 		getWorld()->fire(toX, toY, getDirection());
 		break;
 	case KEY_PRESS_TAB:
@@ -284,14 +283,11 @@ void Citizen::doSomething() {
 		//return;
 	//}
 	if (!isAlive()) {
-		//std::cout << "I, a citizen, am dead" << std::endl;
 		getWorld()->citizenDie();
 		return;
 	}
 	if (testInfected()) {
-		//std::cout << "incrementing infect" << std::endl;
 		incrementInfect();
-		//std::cout << numberInfected() << std::endl;
 	}
 	if (numberInfected() >= 500) {
 		die();
@@ -302,7 +298,6 @@ void Citizen::doSomething() {
 		return;
 	}
 	if (pene == nullptr) {
-		//std::cout << "oh no penny does not exist :(" << std::endl;
 		return;
 	}
 	dist_p = (getX() - getPenny()->getX()) * (getX() - getPenny()->getX()) + (getY() - getPenny()->getY()) * (getY() - getPenny()->getY());
@@ -310,7 +305,6 @@ void Citizen::doSomething() {
 		if (dist_p < 0) {
 			return;
 		}
-		//std::cout << "I can move towards penny!" << std::endl;
 		int diffX = getX() - getPenny()->getX();
 		int diffY = getY() - getPenny()->getY();
 		//if they're on the same "column"
@@ -587,7 +581,6 @@ void DumbZombie::doSomething() {
 		movementPlan--;
 	}
 	else {
-		//std::cout << "yo im be blocced" << std::endl;
 		//moveTo(getX(), getY());
 		movementPlan = 0;
 		return;
@@ -596,7 +589,6 @@ void DumbZombie::doSomething() {
 
 bool DumbZombie::blocksVomit()
 {
-	//std::cout << "blocking vomit from a dumbo" << std::endl;
 	return true;
 }
 
@@ -666,10 +658,8 @@ void SmartZombie::doSomething() {
 		}
 	}
 	if (movementPlan <= 0) {
-		//std::cout << "a new movement plan" << std::endl;
 		movementPlan = randInt(3, 10);
 		if (!getWorld()->faceThisWay(this, myDir)) {
-			//std::cout << "randomizing!" << std::endl;
 			int randBoi = randInt(1, 4);
 			switch (randBoi) {
 			case 1:
@@ -692,7 +682,6 @@ void SmartZombie::doSomething() {
 	}
 	//movementPlan--;
 	myDir = getDirection();
-	//std::cout << myDir <<std::endl;
 	int toX = getX();
 	int toY = getY();
 	switch (myDir) {

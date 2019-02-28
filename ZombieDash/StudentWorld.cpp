@@ -29,7 +29,7 @@ StudentWorld::~StudentWorld()
 StudentWorld::StudentWorld(string assetPath)
 : GameWorld(assetPath)
 {
-	numLevel = 5;
+	numLevel = 1;
 	numInfected = 0;
 	numFlames = 0;
 	numLandmines = 0;
@@ -66,7 +66,6 @@ int StudentWorld::init()
 		for (int i = 0; i < LEVEL_WIDTH; i++) {
 			for (int j = 0; j < LEVEL_HEIGHT; j++) {
 				Level::MazeEntry ge = lev.getContentsOf(i, j);
-				//cout << "got the contents of the level!" << endl;
 				Actor* thing;
 				switch (ge) {
 				case Level::empty:
@@ -230,7 +229,6 @@ void StudentWorld::activateLandmine(int x, int y)
 }
 void StudentWorld::fire(int x, int y, Direction dir) {
 	if (penny->getFlames() <= 0) {
-		//cout << "no flames left!" << endl;
 		return;
 	}
 	bool madeFlames = false;
@@ -242,7 +240,6 @@ void StudentWorld::fire(int x, int y, Direction dir) {
 			thing = new Flame(0 , 0,this);
 			thing->moveTo(x - ((i+1)*SPRITE_WIDTH), y);
 			if (!checkKillable(thing->getX()+4, thing->getY())) {
-				//std::cout << "flames are blocked!" << endl;
 				delete thing;
 				break;
 			}
@@ -259,7 +256,6 @@ void StudentWorld::fire(int x, int y, Direction dir) {
 			thing = new Flame(0, 0,this);
 			thing->moveTo(x + ((i + 1) * SPRITE_WIDTH), y);
 			if (!checkKillable(thing->getX(), thing->getY())) {
-				//std::cout << "flames are blocked!" << endl;
 				delete thing;
 				break;
 			}
@@ -276,7 +272,6 @@ void StudentWorld::fire(int x, int y, Direction dir) {
 			thing = new Flame(0, 0,this);
 			thing->moveTo(x, y + (i+1)*SPRITE_HEIGHT);
 			if (!checkKillable(thing->getX(), thing->getY())) {
-				//std::cout << "flames are blocked!" << endl;
 				delete thing;
 				break;
 			}
@@ -293,7 +288,6 @@ void StudentWorld::fire(int x, int y, Direction dir) {
 			thing = new Flame(0, 0,this);
 			thing->moveTo(x, y - (i + 1)*SPRITE_HEIGHT);
 			if (!checkKillable(thing->getX(), thing->getY())) {
-				//std::cout << "flames are blocked!" << endl;
 				delete thing;
 				break;
 			}
@@ -321,12 +315,12 @@ bool StudentWorld::checkKillable(int x, int y) {
 		if (diffX * diffX + diffY * diffY <= 100) {
 			if ((*it)->canBeKilled() && (*it)->blocker() || (*it)->canPickUp()) {
 				//if it can be killed and it's a blocker (ie a citizen or a zombie), make the thing
-				//cout << "it can be killed and it's a blocker or it can be picked up!" << endl;
+
 				return true;
 			}
 			else if ((*it)->fullBlock()) {
 				//if it blocks stuff, don't make the thing
-				//cout << "it fully blocks things!" << endl;
+
 				return false;
 			}
 		}
@@ -349,8 +343,6 @@ bool StudentWorld::checkExit(int x, int y) {
 		int diffY = abs(y - (*it)->getY()) - 4;
 		if (diffX * diffX + diffY * diffY <= 100) {
 			if ((*it)->isExit()) {
-				//cout << "in check exit" << endl;
-				//cout << "tryna make something on an exit :(" << endl;
 				//if it is an exit, say it is 
 				return true;
 			}
@@ -384,7 +376,6 @@ bool StudentWorld::checkObjectOverlap(Actor * p)
 
 	for (list<Actor*>::iterator it = entities.begin(); it != entities.end(); it++) {
 		if ((*it)->canInfect()) {
-			cout << "infecting!" << endl;
 			p->infect();
 		}
 		if ((*it) == p) {
@@ -423,7 +414,7 @@ bool StudentWorld::checkObjectOverlap(Actor * p)
 bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
 {
 	//check walls and penny 
-	bool valToReturn;
+	bool valToReturn = true;
 	for (list<Actor*>::iterator it = entities.begin(); it != entities.end(); it++) {
 		if ((*it) == p) {
 			continue;
@@ -435,10 +426,7 @@ bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
 		if ((*it)->fullBlock()) {
 			//accounts for corners 
 			if (diffX <= 15 && diffY <= 15 && diffX > 0 && diffY >0) {
-				//cout << "diffX: "<<diffX << endl;
-				//cout << "diffY: " << diffY << endl;
 				if ((*it)->canInfect()) {
-					cout << "infecting!" << endl;
 					p->infect();
 				}
 				valToReturn = false;
@@ -450,7 +438,6 @@ bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
 
 		if (diffX * diffX + diffY * diffY < 256 && (diffX > 0 ||diffY >0)) {
 			if ((*it)->canBeInfected()) {
-				//cout << "infecting!" << endl;
 				(*it)->infect();
 			}
 			if ((*it)->canExplode()) {
@@ -469,7 +456,6 @@ bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
 			}
 			if ((*it)->fullBlock() || (*it)->canVomit()) {
 
-				//cout << "blocky boi" << p->numTicksHere()<< endl;
 				valToReturn = false;
 			}
 			
@@ -690,7 +676,6 @@ bool StudentWorld::checkCollision(int x, int y) {
 		//later, check to make sure it's one of Zombie, Wall, or Citizen 
 		if (abs(x - (*it)->getX()) * abs(x - (*it)->getX()) + abs(y - (*it)->getY())*abs(y - (*it)->getY()) <= 144 && (*it)->canKill()) {
 			penny->die();
-			//cout << "penny died" << endl;
 			return true;
 		}
 		int diffX = abs(x - (*it)->getX()) - 4;
@@ -707,8 +692,6 @@ bool StudentWorld::checkCollision(int x, int y) {
 			if ((*it)->canExplode()) {
 				(*it)->explode();
 			}
-			//cout << "collision happening!" << endl;
-			//cerr << "collided w something" << endl;
 			if ((*it)->canKill()) {
 				//decLives();
 				penny->die();
@@ -716,7 +699,6 @@ bool StudentWorld::checkCollision(int x, int y) {
 			}
 			//vomit!
 			if ((*it)->canInfect()) {
-				//cout << "INFECTING PENNYYYY" << endl;
 				penny->infect();
 			}
 			//goodies!
@@ -739,7 +721,6 @@ bool StudentWorld::checkCollision(int x, int y) {
 				return true;
 			}
 			if ((*it)->isExit() && numCitizensToSave == 0) {
-				//cout << "at the next level lloading" << endl;
 				nextLevel();
 				return true;
 			}
@@ -790,13 +771,11 @@ void StudentWorld::cleanUp()
 	while (it1 != entities.end()) {
 		std::list<Actor*>::iterator it2;
 		it2 = it1;
-		//cout << *it2 << endl;
 		delete *it2;
 		entities.erase(it2);
 		it1 = entities.begin();
 	}
 	if (entities.size() == 0) {
-		//cout << "all the bois were deleted!" << endl;
 	}
 	
 }

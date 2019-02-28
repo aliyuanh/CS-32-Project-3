@@ -61,9 +61,7 @@ private:
 
 class Penelope : public Actor {
 public: 
-	Penelope(int myX, int myY, StudentWorld* myWorld) :Actor(IID_PLAYER, SPRITE_WIDTH*myX, SPRITE_HEIGHT*myY, myWorld, 0, 0, 1.0) {
-	
-	}
+	Penelope(int myX, int myY, StudentWorld* myWorld);
 	virtual void doSomething();
 	virtual bool canBeKilled();
 	virtual void die();

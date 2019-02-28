@@ -5,6 +5,7 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
+
 using namespace std;
 //TODO: sounds
 //TODO: scores 
@@ -142,7 +143,6 @@ void StudentWorld::nextLevel()
 	myStatus = 3;
 	cleanUp();
 	init();
-	//entities.clear();
 }
 int StudentWorld::move()
 {
@@ -154,7 +154,7 @@ int StudentWorld::move()
 	}
 	else if (myStatus == 3) {
 		myStatus = 0;
-		return GWSTATUS_PLAYER_WON;
+		return GWSTATUS_FINISHED_LEVEL;
 	}
 	//cerr << "moving peeps!" << endl;
 	if (penny->isAlive() == false) {
@@ -390,9 +390,12 @@ bool StudentWorld::checkObjectOverlap(Actor * p)
 			}
 			
 			if ((*it)->isExit() && p->canExit()) {
-				p->Actor::die();
-				playSound(SOUND_CITIZEN_SAVED);
-				citizenDie();
+				//p->Actor::die();
+				//
+				//cout << "the 194 one" << endl;
+				//increaseScore(1000);
+				//playSound(SOUND_CITIZEN_SAVED);
+			//	citizenDie();
 				return true;
 			}
 			else if ((*it)->canExit()) {
@@ -445,8 +448,8 @@ bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
 			}
 			if ((*it)->isExit() && !p->canVomit()) {
 				p->Actor::die();
-				playSound(SOUND_CITIZEN_SAVED);
 				citizenDie();
+				playSound(SOUND_CITIZEN_SAVED);
 				increaseScore(1000);
 				valToReturn = false;
 			}
@@ -488,7 +491,10 @@ bool StudentWorld::canVomitHere(int x, int y, Actor* p )
 		int diffX = (*it)->getX() - p->getX();
 		int diffY = (*it)->getY() - p->getY();
 		if (diffX*diffX + diffY * diffY <= 16*16) {
-			if ((*it)->blocksVomit() || (*it)->canKill() || (*it)->canVomit()) {
+			if ((*it)->canInfect() || (*it)->isExit()) {
+				return false;
+			}
+			if ((*it)->blocksVomit() || (*it)->canKill() || (*it)->canVomit() ) {
 				continue;
 			}
 			foundThing = true;
@@ -720,7 +726,7 @@ bool StudentWorld::checkCollision(int x, int y) {
 			if ((*it)->blocker()) {
 				return true;
 			}
-			if ((*it)->isExit() && numCitizensToSave == 0) {
+			if ((*it)->isExit() && numCitizensToSave <= 0) {
 				nextLevel();
 				return true;
 			}
@@ -731,23 +737,7 @@ bool StudentWorld::checkCollision(int x, int y) {
 	return false; //has not collided with anything :) 
 
 }//if it intersects w any wall, cit, or zomb, then return false 
-//need to implement later :( 
-bool StudentWorld::hitPenny(int x, int y) {
-	int diffX = abs(x - penny->getX())-8;
-	int diffY = abs(y - penny->getY())-2;
-	if (y-penny->getY()<= 16 && y-penny->getY()>= 0 && penny->getX()-x <= 16 && penny->getX()-x >= 0) {
-		//upper left corner checker
-		//return true;
-	}
-	if (y-penny->getY()<= 16 && y-penny->getY()>= 0 && penny->getX() - x <= 16 && penny->getX() - x >= 0 ) {
-		//upper right corner checker
-		//return true;
-	}
-	if (diffX * diffX + diffY * diffY <= 100) {
-		return true;
-	}
-	return false;
-}
+
 void StudentWorld::checkTheDead() {
 	for (list<Actor*>::iterator it = entities.begin(); it != entities.end();) {
 		//delete if things die :) 

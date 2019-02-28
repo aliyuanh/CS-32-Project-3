@@ -187,7 +187,9 @@ bool Actor::canExit()
 {
 	return false;
 }
+Penelope::Penelope(int myX, int myY, StudentWorld* myWorld) :Actor(IID_PLAYER, SPRITE_WIDTH*myX, SPRITE_HEIGHT*myY, myWorld, 0, 0, 1.0) {
 
+}
 void Penelope::doSomething() {
 	if (testInfected()) {
 		incrementInfect();
@@ -462,8 +464,6 @@ bool Citizen::canExit()
 
 void Citizen::die()
 {
-	getWorld()->citizenDie();
-	//getWorld()->playSound(SOUND_CITIZEN_DIE);
 	Actor::die();
 }
 

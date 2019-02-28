@@ -159,7 +159,6 @@ int StudentWorld::move()
 	//cerr << "moving peeps!" << endl;
 	if (penny->isAlive() == false) {
 		decLives();
-		cerr << "penny has died! restart >:(" << endl;
 		return GWSTATUS_PLAYER_DIED;
 	}
 	//check if order is correct later 
@@ -462,7 +461,9 @@ bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
 				valToReturn = false;
 			}
 			
-			
+			if ((*it)->canVomit()) {
+				valToReturn = false;
+			}
 		}
 
 	}

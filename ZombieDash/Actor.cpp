@@ -898,6 +898,7 @@ void Mine::explode()
 {
 	if (numTicksHere() >= 30) {
 		getWorld()->activateLandmine(getX(), getY());
+		getWorld()->playSound(SOUND_LANDMINE_EXPLODE);
 	}
 }
 

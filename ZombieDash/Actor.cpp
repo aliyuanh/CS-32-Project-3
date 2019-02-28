@@ -135,6 +135,11 @@ void Actor::explode()
 {
 }
 
+bool Actor::canVomit()
+{
+	return false;
+}
+
 int Actor::numTicksHere()
 {
 	return numTicks;
@@ -207,6 +212,7 @@ void Penelope::doSomething() {
 		moving = true;
 		break;
 	case KEY_PRESS_SPACE:
+		std::cout << "firing!" << std::endl;
 		getWorld()->fire(toX, toY, getDirection());
 		break;
 	case KEY_PRESS_TAB:
@@ -487,7 +493,7 @@ void DumbZombie::doSomething() {
 			vomY += SPRITE_HEIGHT;
 			break;
 		default:
-			std::cout << "error!" << std::endl;
+			std::cerr << "error!" << std::endl;
 			break;
 	}
 	//check for if there's a person in front  
@@ -551,8 +557,8 @@ void DumbZombie::doSomething() {
 		movementPlan--;
 	}
 	else {
-		std::cout << "yo im be blocced" << std::endl;
-		moveTo(getX(), getY());
+		//std::cout << "yo im be blocced" << std::endl;
+		//moveTo(getX(), getY());
 		movementPlan = 0;
 	}
 }
@@ -563,11 +569,102 @@ bool DumbZombie::blocksVomit()
 	return true;
 }
 
+bool DumbZombie::fullBlock()
+{
+	return true;
+}
+
+bool DumbZombie::canExit()
+{
+	return false;
+}
+
+void DumbZombie::die()
+{
+	getWorld()->increaseScore(1000);
+	getWorld()->playSound(SOUND_ZOMBIE_DIE);
+	Actor::die();
+
+}
+
+bool DumbZombie::canVomit()
+{
+	return true;
+}
+
 SmartZombie::SmartZombie(int posX, int posY, StudentWorld* world) :Zombie(posX, posY) {
 	setWorld(world);
+	movementPlan = 0;
 }
 void SmartZombie::doSomething() {
+	incrementTicks();
+	if (!isAlive()) {
+		return;
+	}
+	if (numTicksHere() % 2 == 0) {
+		return;
+	}
+	//find out where to vomit!
+	int vomX = getX();
+	int vomY = getY();
+	Direction myDir = getDirection();
+	switch (myDir) {
+	case right:
+		vomX += SPRITE_WIDTH;
+		break;
+	case left:
+		vomX -= SPRITE_WIDTH;
+		break;
+	case down:
+		vomY -= SPRITE_HEIGHT;
+		break;
+	case up:
+		vomY += SPRITE_HEIGHT;
+		break;
+	default:
+		std::cerr << "error!" << std::endl;
+		break;
+	}
+	//check for if there's a person in front  
+	if (getWorld()->canVomitHere(vomX, vomY, this)) {
+		int chanceVomit = randInt(1, 3);
+		//if it vomits, then immediately return. otherwise, move n shit 
+		if (chanceVomit == 1) {
+			getWorld()->playSound(SOUND_ZOMBIE_VOMIT);
+			getWorld()->vomitHere(vomX, vomY);
+			return;
+		}
+	}
+	if (movementPlan <= 0) {
+		movementPlan = randInt(3, 10);
+		setDirection(getWorld()->faceThisWay(this));
+		//std::cout << "changing direction" << std::endl;
+	}
+	movementPlan--;
+	//std::cout << "decrementing movement plan" << std::endl;
+}
+bool SmartZombie::blocksVomit()
+{
+	return true;
+}
+bool SmartZombie::fullBlock()
+{
+	return true;
+}
+bool SmartZombie::canExit()
+{
+	return false;
+}
+void SmartZombie::die()
+{
+	getWorld()->increaseScore(1000);
+	getWorld()->playSound(SOUND_ZOMBIE_DIE);
 
+	Actor::die();
+}
+bool SmartZombie::canVomit()
+{
+	return true;
 }
 //All Stationary Things
 Stationary::Stationary(int ID, double myX, double myY, Direction dir, int depth) :Actor(ID, SPRITE_WIDTH*myX, SPRITE_HEIGHT * myY,Actor::getWorld(), dir, depth, 1.0)

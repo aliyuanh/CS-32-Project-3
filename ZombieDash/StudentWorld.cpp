@@ -4,8 +4,11 @@
 #include <cmath>
 #include <string>
 using namespace std;
-
-//TODO: make flames light up landmines
+//TODO: sounds
+//TODO: scores 
+//TODO: format game text - fix 
+//TODO: smart zombies 
+//TODO: citizens run away from zombies 
 GameWorld* createStudentWorld(string assetPath)
 {
 	//this is where everything is made 
@@ -124,8 +127,6 @@ int StudentWorld::init()
 		(*it)->setPenny(penny);
 	}
 	//TODO: remove AFTER testing 
-	Actor* vom = new Vomit(5, 5, this);
-	entities.push_back(vom);
     return GWSTATUS_CONTINUE_GAME;
 }
 
@@ -160,12 +161,22 @@ int StudentWorld::move()
 	//check if things die
 	checkTheDead();
 	moveEnts();
+	int numZeros = 5;
+	int copiedScore = score;
+	while (copiedScore != 0) {
+		numZeros--;
+		copiedScore /= 10;
+	}
+	string append = "";
+	for (int i = 0; i < numZeros; i++) {
+		append += "0";
+	}
 	if (penny != nullptr) {
 		penny->doSomething();
 		if (penny != nullptr) {
-			setGameStatText("Score:  " + to_string(score) + "  Level:  " + to_string(numLevel)
-				+ "  Vaccines:  " + to_string(penny->getVaccines()) + "  Flames:  " + to_string(penny->getFlames())
-				+ "  Mines:  " + to_string(penny->getLandmines()) + "  Infected:  " + to_string(penny->numberInfected()));
+			setGameStatText("Score: " +append+ to_string(score) + "  Level: " + to_string(numLevel)
+				+ "  Vaccines: " + to_string(penny->getVaccines()) + "  Flames: " + to_string(penny->getFlames())
+				+ "  Mines: " + to_string(penny->getLandmines()) + "  Infected: " + to_string(penny->numberInfected()));
 		}
 		
 	}
@@ -214,7 +225,7 @@ void StudentWorld::activateLandmine(int x, int y)
 }
 void StudentWorld::fire(int x, int y, Direction dir) {
 	if (penny->getFlames() <= 0) {
-		
+		cout << "no flames left!" << endl;
 		return;
 	}
 	Actor* thing;
@@ -225,6 +236,7 @@ void StudentWorld::fire(int x, int y, Direction dir) {
 			thing = new Flame(0 , 0,this);
 			thing->moveTo(x - ((i+1)*SPRITE_WIDTH), y);
 			if (!checkKillable(thing->getX()+4, thing->getY())) {
+				std::cout << "flames are blocked!" << endl;
 				delete thing;
 				break;
 			}
@@ -240,6 +252,7 @@ void StudentWorld::fire(int x, int y, Direction dir) {
 			thing = new Flame(0, 0,this);
 			thing->moveTo(x + ((i + 1) * SPRITE_WIDTH), y);
 			if (!checkKillable(thing->getX(), thing->getY())) {
+				std::cout << "flames are blocked!" << endl;
 				delete thing;
 				break;
 			}
@@ -255,6 +268,7 @@ void StudentWorld::fire(int x, int y, Direction dir) {
 			thing = new Flame(0, 0,this);
 			thing->moveTo(x, y + (i+1)*SPRITE_HEIGHT);
 			if (!checkKillable(thing->getX(), thing->getY())) {
+				std::cout << "flames are blocked!" << endl;
 				delete thing;
 				break;
 			}
@@ -270,6 +284,7 @@ void StudentWorld::fire(int x, int y, Direction dir) {
 			thing = new Flame(0, 0,this);
 			thing->moveTo(x, y - (i + 1)*SPRITE_HEIGHT);
 			if (!checkKillable(thing->getX(), thing->getY())) {
+				std::cout << "flames are blocked!" << endl;
 				delete thing;
 				break;
 			}
@@ -293,10 +308,12 @@ bool StudentWorld::checkKillable(int x, int y) {
 		if (diffX * diffX + diffY * diffY <= 100) {
 			if ((*it)->canBeKilled() && (*it)->blocker() || (*it)->canPickUp()) {
 				//if it can be killed and it's a blocker (ie a citizen or a zombie), make the thing
+				cout << "it can be killed and it's a blocker or it can be picked up!" << endl;
 				return true;
 			}
 			else if ((*it)->fullBlock()) {
 				//if it blocks stuff, don't make the thing
+				cout << "it fully blocks things!" << endl;
 				return false;
 			}
 		}
@@ -306,7 +323,7 @@ bool StudentWorld::checkKillable(int x, int y) {
 	int pennyX = penny->getX() - x;
 	int pennyY = penny->getY() - y;
 	if (pennyX*pennyX + pennyY * pennyY < 256) {
-		return false;
+		//return false;
 	}
 	return true;
 
@@ -385,8 +402,8 @@ bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
 		int diffX = abs(x - (*it)->getX());
 		int diffY = abs(y - (*it)->getY());
 		if (diffX * diffX + diffY * diffY < 256) {
-			cout << (*it)->getX() << " vs " << x<<endl;
-			cout << (*it)->getY() << " vs " << y<<endl;
+			//cout << (*it)->getX() << " vs " << x<<endl;
+			//cout << (*it)->getY() << " vs " << y<<endl;
 
 			if ((*it)->isExit()) {
 				p->die();
@@ -394,13 +411,10 @@ bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
 				return false;
 			}
 			if ((*it)->canKill()) {
-				//std::cout << "killing something" << endl;
 				p->die();
 				return false;
 			}
 			if ((*it)->fullBlock()) {
-				cout << "something be blockign me!" << endl;
-				cout << "imma be returning falso so I shouldnt move" << endl;
 				return false;
 			}
 			if ((*it)->canInfect()) {
@@ -435,7 +449,7 @@ bool StudentWorld::canVomitHere(int x, int y, Actor* p )
 		int diffX = (*it)->getX() - p->getX();
 		int diffY = (*it)->getY() - p->getY();
 		if (diffX*diffX + diffY * diffY < 256) {
-			if ((*it)->blocksVomit()) {
+			if ((*it)->blocksVomit() || (*it)->canKill()) {
 				return false;
 			}
 			//cout << "found a boi to vomit on!" << endl;
@@ -461,6 +475,118 @@ void StudentWorld::vomitHere(int x, int y)
 	Actor* thing = new Vomit(0, 0, this);
 	thing->moveTo(x, y);
 	entities.push_back(thing);
+}
+
+void StudentWorld::increaseScore(int num)
+{
+	score += num;
+}
+
+Direction StudentWorld::faceThisWay(Actor * p)
+{
+	int smallestDistance = 10000000;
+	int diffX = 100000;
+	int diffY = 100000;
+	Direction toSet = GraphObject::right;
+	for (list<Actor*>::iterator it = entities.begin(); it != entities.end(); it++) {
+		if ((*it) == p) {
+			continue;
+		}
+		if ((*it)->canVomit()) {
+			toSet = p->getDirection();
+			//std::cout << "can't do dis on a vomity boi" << endl;
+			continue;
+		}
+		diffX = p->getX() - (*it)->getY(); //positive means face left
+		diffY = p->getY() - (*it)->getX();//positive means face down
+		if (diffX * diffX + diffY * diffY < 80 * 80 || diffX * diffX + diffY * diffY < smallestDistance) {
+			//std::cout << "changing direction" << std::endl;
+			smallestDistance = diffX * diffX + diffY * diffY;
+			//cout << smallestDistance << endl;
+			if (diffX == 0) {//same row 
+				if (diffY > 0) {
+					toSet = GraphObject::down;
+				}
+				else {
+					cout << "auto to up" << endl;
+
+					toSet = GraphObject::up;
+				}
+			}
+			else if (diffY == 0) {//same column 
+				if (diffX > 0) {
+					toSet = GraphObject::left;
+				}
+				else {
+					toSet = GraphObject::right;
+				}
+			}
+			else {//not same col or row 
+				if (abs(diffX) > abs(diffY)) {//face horizontally 
+					if (diffX > 0) {
+						toSet = GraphObject::left;
+					}
+					else {
+						toSet = GraphObject::right;
+					}
+				}
+				else {//face vertically 
+					if (diffY > 0) {
+						toSet = GraphObject::down;
+					}
+					else {
+						toSet = GraphObject::up;
+					}
+				}
+			}
+		}
+		//otherwise, after also checking penny, set it to a random dir
+
+	}
+	int pennX = p->getX() - penny->getX();
+	int pennY = p->getY() - penny->getY();
+	if (pennX * pennX + pennY * pennY < 80 * 80 && pennX * pennX + pennY * pennY < smallestDistance) {
+		cout << "penny be close by" << endl;
+		//cout << smallestDistance << endl;
+		if (pennX == 0) {//same row 
+			if (pennY > 0) {
+				toSet = GraphObject::down;
+			}
+			else {
+				toSet = GraphObject::up;
+			}
+		}
+		else if (pennY == 0) {//same column 
+			if (pennX > 0) {
+				toSet = GraphObject::left;
+			}
+			else {
+				toSet = GraphObject::right;
+			}
+		}
+		else {//not same col or row 
+			if (abs(pennX) > abs(pennY)) {//face horizontally 
+				if (pennX > 0) {
+					toSet = GraphObject::left;
+				}
+				else {
+					toSet = GraphObject::right;
+				}
+			}
+			else {//face vertically 
+				if (pennY > 0) {
+					toSet = GraphObject::down;
+				}
+				else {
+					toSet = GraphObject::up;
+				}
+			}
+		}
+		if (pennX == 0 && pennY == 0) {
+			toSet = p->getDirection();
+		}
+	}
+	return toSet;
 }
 
 bool StudentWorld::checkCollision(int x, int y) {

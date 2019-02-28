@@ -36,6 +36,7 @@ public:
 	virtual void cure();
 	virtual void fireFlame();
 	virtual void explode();
+	virtual bool canVomit();
 	int numTicksHere();
 	void incrementTicks();
 	virtual StudentWorld* getWorld();
@@ -99,6 +100,10 @@ public:
 	DumbZombie(int posX, int posY, StudentWorld* world);
 	virtual void doSomething();
 	virtual bool blocksVomit();
+	virtual bool fullBlock();
+	virtual bool canExit();
+	virtual void die();
+	virtual bool canVomit();
 private:
 	int movementPlan;
 };
@@ -107,6 +112,14 @@ class SmartZombie : public Zombie {
 public:
 	SmartZombie(int posX, int posY, StudentWorld* world);
 	virtual void doSomething();
+	virtual bool blocksVomit();
+	virtual bool fullBlock();
+	virtual bool canExit();
+	virtual void die();
+	virtual bool canVomit();
+private:
+	int movementPlan;
+
 };
 
 class Stationary : public Actor {

@@ -43,6 +43,7 @@ private:
 	int numLandmines;
 	int numVaccines;
 	int numCitizensToSave;
+	int myStatus = 0;
 };
 
 #endif // STUDENTWORLD_H_

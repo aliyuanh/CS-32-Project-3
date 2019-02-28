@@ -23,13 +23,15 @@ StudentWorld::~StudentWorld()
 StudentWorld::StudentWorld(string assetPath)
 : GameWorld(assetPath)
 {
-	numLevel = 5;
+	numLevel = 4;
 	score = 0;
 	numInfected = 0;
 	numFlames = 0;
 	numLandmines = 0;
 	numVaccines = 0;
 	numCitizensToSave = 0;
+	myStatus = 0;
+	penny = nullptr;
 }
 
 int StudentWorld::init()
@@ -44,10 +46,15 @@ int StudentWorld::init()
 	string levelFile = "level0"+to_string(numLevel)+".txt";
 	Level::LoadResult result = lev.loadLevel(levelFile);
 	if (result == Level::load_fail_file_not_found) {
-		//cerr << "cannot find " << levelFile << " data file"<<endl;
+		cerr << "cannot find " << levelFile << " data file"<<endl;
+		myStatus = 1;
+		cerr << "returning a level error" << endl;
+		return GWSTATUS_LEVEL_ERROR;
 	}
 	else if (result == Level::load_fail_bad_format) {
-		//cerr << "level was improperly formatted" << endl;
+		cerr << "level was improperly formatted" << endl;
+		myStatus = 2;
+		return GWSTATUS_LEVEL_ERROR;
 	}
 	else if (result == Level::load_success) {
 		//cerr << "Successfully loaded level" << endl;
@@ -119,8 +126,6 @@ int StudentWorld::init()
 	//TODO: remove AFTER testing 
 	Actor* vom = new Vomit(5, 5, this);
 	entities.push_back(vom);
-	//vom = new DumbZombie(6, 6, this);
-	//entities.push_back(vom);
     return GWSTATUS_CONTINUE_GAME;
 }
 
@@ -138,6 +143,12 @@ void StudentWorld::nextLevel()
 }
 int StudentWorld::move()
 {
+	if (myStatus == 1) {
+		return GWSTATUS_LEVEL_ERROR;
+	}
+	else if (myStatus == 2) {
+		return GWSTATUS_LEVEL_ERROR;
+	}
 	//cerr << "moving peeps!" << endl;
 	if (penny->isAlive() == false) {
 		decLives();
@@ -148,12 +159,17 @@ int StudentWorld::move()
 
 	//check if things die
 	checkTheDead();
-
 	moveEnts();
-	penny->doSomething();
-	setGameStatText("Score:  "+ to_string(score) + "  Level:  " + to_string(numLevel)
-	 + "  Vaccines:  " + to_string(penny->getVaccines()) + "  Flames:  " + to_string(penny->getFlames())
-	 + "  Mines:  " + to_string(penny->getLandmines()) + "  Infected:  " + to_string(penny->numberInfected()));
+	if (penny != nullptr) {
+		penny->doSomething();
+		if (penny != nullptr) {
+			setGameStatText("Score:  " + to_string(score) + "  Level:  " + to_string(numLevel)
+				+ "  Vaccines:  " + to_string(penny->getVaccines()) + "  Flames:  " + to_string(penny->getFlames())
+				+ "  Mines:  " + to_string(penny->getLandmines()) + "  Infected:  " + to_string(penny->numberInfected()));
+		}
+		
+	}
+	
 	//decLives();
 	return GWSTATUS_CONTINUE_GAME;
    // return GWSTATUS_PLAYER_DIED;
@@ -368,7 +384,10 @@ bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
 		}
 		int diffX = abs(x - (*it)->getX());
 		int diffY = abs(y - (*it)->getY());
-		if (diffX * diffX + diffY * diffY <= 144) {
+		if (diffX * diffX + diffY * diffY < 256) {
+			cout << (*it)->getX() << " vs " << x<<endl;
+			cout << (*it)->getY() << " vs " << y<<endl;
+
 			if ((*it)->isExit()) {
 				p->die();
 				score += 1000;
@@ -380,7 +399,8 @@ bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
 				return false;
 			}
 			if ((*it)->fullBlock()) {
-				//cout << "something be blockign me!" << endl;
+				cout << "something be blockign me!" << endl;
+				cout << "imma be returning falso so I shouldnt move" << endl;
 				return false;
 			}
 			if ((*it)->canInfect()) {
@@ -412,8 +432,8 @@ bool StudentWorld::canVomitHere(int x, int y, Actor* p )
 		if ((*it)  == p) {
 			continue;
 		}
-		int diffX = (*it)->getX() - x;
-		int diffY = (*it)->getY() - y;
+		int diffX = (*it)->getX() - p->getX();
+		int diffY = (*it)->getY() - p->getY();
 		if (diffX*diffX + diffY * diffY < 256) {
 			if ((*it)->blocksVomit()) {
 				return false;

@@ -546,8 +546,14 @@ void DumbZombie::doSomething() {
 	}
 	if (getWorld()->personMoveFreely(this, toX, toY)) {
 		moveTo(toX, toY);
+		//std::cout << "I can move sooo free" << std::endl;
 		//std::cout << "decrementing!" << std::endl;
 		movementPlan--;
+	}
+	else {
+		std::cout << "yo im be blocced" << std::endl;
+		moveTo(getX(), getY());
+		movementPlan = 0;
 	}
 }
 

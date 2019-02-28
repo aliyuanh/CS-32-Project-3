@@ -500,11 +500,60 @@ void DumbZombie::doSomething() {
 			return;
 		}
 	}
-
+	int toX = getX();
+	int toY = getY();
+	if (movementPlan <= 0) {
+		//std::cout << "plan is 0!" << std::endl;
+		movementPlan = randInt(3, 10);
+		int dirToPick = randInt(1, 4);
+		switch (dirToPick) {
+		case 1:
+			setDirection(right);
+			toX += 1;
+			break;
+		case 2:
+			setDirection(left);
+			toX -= 1;
+			break;
+		case 3:
+			setDirection(up);
+			toY += 1;
+			break;
+		case 4:
+			setDirection(down);
+			toY += 1;
+			break;
+		default:
+			break;
+		}
+	}
+	else {
+		Direction myDirection = getDirection();
+		switch (myDirection) {
+		case left:
+			toX -= 1;
+			break;
+		case right:
+			toX += 1;
+			break;
+		case up:
+			toY += 1;
+			break;
+		case down:
+			toY -= 1;
+			break;
+		}
+	}
+	if (getWorld()->personMoveFreely(this, toX, toY)) {
+		moveTo(toX, toY);
+		//std::cout << "decrementing!" << std::endl;
+		movementPlan--;
+	}
 }
 
 bool DumbZombie::blocksVomit()
 {
+	//std::cout << "blocking vomit from a dumbo" << std::endl;
 	return true;
 }
 
@@ -608,6 +657,11 @@ Goodie::Goodie(int ID, int posX, int posY) :Stationary(ID, posX, posY, right, 1)
 }
 
 bool Goodie::canPickUp()
+{
+	return true;
+}
+
+bool Goodie::blocksVomit()
 {
 	return true;
 }

@@ -166,6 +166,8 @@ class Goodie : public Stationary {
 public:
 	Goodie(int ID, int posX, int posY);
 	virtual bool canPickUp();
+	//this is a TEMPORARY FIX. this is only bc ZOMBIES VOMIT ON GOODIES OTHERWISE
+	virtual bool blocksVomit();
 	virtual bool canBeKilled();
 };
 

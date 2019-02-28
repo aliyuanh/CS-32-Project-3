@@ -23,7 +23,7 @@ StudentWorld::~StudentWorld()
 StudentWorld::StudentWorld(string assetPath)
 : GameWorld(assetPath)
 {
-	numLevel = 3;
+	numLevel = 5;
 	score = 0;
 	numInfected = 0;
 	numFlames = 0;
@@ -119,8 +119,8 @@ int StudentWorld::init()
 	//TODO: remove AFTER testing 
 	Actor* vom = new Vomit(5, 5, this);
 	entities.push_back(vom);
-	vom = new DumbZombie(6, 6, this);
-	entities.push_back(vom);
+	//vom = new DumbZombie(6, 6, this);
+	//entities.push_back(vom);
     return GWSTATUS_CONTINUE_GAME;
 }
 
@@ -285,6 +285,12 @@ bool StudentWorld::checkKillable(int x, int y) {
 			}
 		}
 
+	}
+
+	int pennyX = penny->getX() - x;
+	int pennyY = penny->getY() - y;
+	if (pennyX*pennyX + pennyY * pennyY < 256) {
+		return false;
 	}
 	return true;
 

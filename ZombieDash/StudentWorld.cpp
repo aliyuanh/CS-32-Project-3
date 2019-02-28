@@ -23,7 +23,7 @@ StudentWorld::~StudentWorld()
 StudentWorld::StudentWorld(string assetPath)
 : GameWorld(assetPath)
 {
-	numLevel = 5;
+	numLevel = 3;
 	score = 0;
 	numInfected = 0;
 	numFlames = 0;
@@ -141,6 +141,7 @@ int StudentWorld::move()
 	//cerr << "moving peeps!" << endl;
 	if (penny->isAlive() == false) {
 		decLives();
+		cerr << "penny has died! restart >:(" << endl;
 		return GWSTATUS_PLAYER_DIED;
 	}
 	//check if order is correct later 
@@ -362,6 +363,11 @@ bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
 		int diffX = abs(x - (*it)->getX());
 		int diffY = abs(y - (*it)->getY());
 		if (diffX * diffX + diffY * diffY <= 144) {
+			if ((*it)->isExit()) {
+				p->die();
+				score += 1000;
+				return false;
+			}
 			if ((*it)->canKill()) {
 				//std::cout << "killing something" << endl;
 				p->die();
@@ -374,6 +380,7 @@ bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
 			if ((*it)->canInfect()) {
 				p->infect();
 			}
+			
 		}
 
 	}
@@ -401,18 +408,18 @@ bool StudentWorld::canVomitHere(int x, int y, Actor* p )
 		}
 		int diffX = (*it)->getX() - x;
 		int diffY = (*it)->getY() - y;
-		if (diffX*diffX + diffY * diffY <= 256) {
+		if (diffX*diffX + diffY * diffY < 256) {
 			if ((*it)->blocksVomit()) {
 				return false;
 			}
-			cout << "found a boi to vomit on!" << endl;
+			//cout << "found a boi to vomit on!" << endl;
 			cout << diffX << "," << diffY << endl;
 			foundThing = true;
 		}
 	}
 	int pennX = penny->getX() - x;
 	int pennY = penny->getY() - y;
-	if (pennX * pennX + pennY * pennY <= 256) {
+	if (pennX * pennX + pennY * pennY < 256) {
 		return true;
 	}
 

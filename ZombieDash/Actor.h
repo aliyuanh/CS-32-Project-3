@@ -98,6 +98,7 @@ class DumbZombie : public Zombie {
 public: 
 	DumbZombie(int posX, int posY, StudentWorld* world);
 	virtual void doSomething();
+	virtual bool blocksVomit();
 private:
 	int movementPlan;
 };

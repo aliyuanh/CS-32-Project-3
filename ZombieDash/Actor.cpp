@@ -255,9 +255,9 @@ Citizen::Citizen(int posX, int posY, StudentWorld* world, Actor* penny):Moving(I
 void Citizen::doSomething() {
 	//TODO: check for collisions with zambies!!1
 	incrementTicks();
-	if (getWorld()->checkObjectOverlap(this)) {
-		return;
-	}
+	//if (getWorld()->checkObjectOverlap(this)) {
+		//return;
+	//}
 	if (!isAlive()) {
 		//std::cout << "I, a citizen, am dead" << std::endl;
 		getWorld()->citizenDie();
@@ -441,6 +441,7 @@ bool Citizen::canExit()
 
 void Citizen::die()
 {
+	getWorld()->citizenDie();
 	Actor::die();
 }
 
@@ -500,6 +501,11 @@ void DumbZombie::doSomething() {
 		}
 	}
 
+}
+
+bool DumbZombie::blocksVomit()
+{
+	return true;
 }
 
 SmartZombie::SmartZombie(int posX, int posY, StudentWorld* world) :Zombie(posX, posY) {

@@ -605,6 +605,7 @@ bool StudentWorld::faceThisWay(Actor * p, Direction&dir)
 	int pennX = p->getX() - penny->getX();
 	int pennY = p->getY() - penny->getY();
 	if (pennX * pennX + pennY * pennY < 80 * 80 && pennX * pennX + pennY * pennY < smallestDistance) {
+		cout << "penny be close!" << endl;
 		if (pennX == 0) {//same row 
 			if (pennY > 0) {
 				toSet = GraphObject::down;
@@ -672,17 +673,23 @@ bool StudentWorld::faceThisWay(Actor * p, Direction&dir)
 			}
 		}
 		if (pennX == 0 && pennY == 0) {
-			//cout << "same spot" << endl;
+			cout << "same spot" << endl;
 			hasBeenChanged = false;
-			return false;
+			return true;
 		}
+		p->setDirection(dir);
+		dir = toSet;
+		return true;
 	}
+	dir = toSet;
 	if (!hasBeenChanged) {
 		cout << "has not been changed" << endl;
 		return false;
 	}
-	dir = toSet;
-
+	else {
+		cout << "yeee" << endl;
+		return true;
+	}
 	return true;
 }
 

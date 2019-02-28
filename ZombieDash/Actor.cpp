@@ -512,7 +512,7 @@ void DumbZombie::doSomething() {
 	int toX = getX();
 	int toY = getY();
 	if (movementPlan <= 0) {
-		//std::cout << "plan is 0!" << std::endl;
+		std::cout << "plan is 0!" << std::endl;
 		movementPlan = randInt(3, 10);
 		int dirToPick = randInt(1, 4);
 		switch (dirToPick) {
@@ -553,8 +553,8 @@ void DumbZombie::doSomething() {
 			break;
 		}
 	}
-	if (getWorld()->personMoveFreely(this, toX, toY) && !getWorld()->checkObjectOverlap(this)) {
-		//moveTo(toX, toY);
+	if (getWorld()->personMoveFreely(this, toX, toY)) {
+		moveTo(toX, toY);
 		movementPlan--;
 	}
 	else {
@@ -640,27 +640,20 @@ void SmartZombie::doSomething() {
 		//std::cout << "a new movement plan" << std::endl;
 		movementPlan = randInt(3, 10);
 		if (!getWorld()->faceThisWay(this, myDir)) {
-			std::cout << "randomizing!" << std::endl;
+			//std::cout << "randomizing!" << std::endl;
 			int randBoi = randInt(1, 4);
 			switch (randBoi) {
 			case 1:
 				setDirection(right);
-				std::cout << "set dir" << std::endl;
 				break;
 			case 2:
 				setDirection(left);
-				std::cout << "set dir" << std::endl;
-
 				break;
 			case 3:
 				setDirection(up);
-				std::cout << "set dir" << std::endl;
-
 				break;
 			case 4:
 				setDirection(down);
-				std::cout << "set dir" << std::endl;
-
 				break;
 			}
 		}

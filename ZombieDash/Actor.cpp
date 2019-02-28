@@ -451,6 +451,7 @@ bool Citizen::canExit()
 void Citizen::die()
 {
 	getWorld()->citizenDie();
+	//getWorld()->playSound(SOUND_CITIZEN_DIE);
 	Actor::die();
 }
 
@@ -512,7 +513,6 @@ void DumbZombie::doSomething() {
 	int toX = getX();
 	int toY = getY();
 	if (movementPlan <= 0) {
-		std::cout << "plan is 0!" << std::endl;
 		movementPlan = randInt(3, 10);
 		int dirToPick = randInt(1, 4);
 		switch (dirToPick) {

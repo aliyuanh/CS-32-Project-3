@@ -455,6 +455,33 @@ void Citizen::doSomething() {
 			}
 		}
 	}
+	//std::cout << "o im a citisen doin nothing" << std::endl;
+	Direction shouldTurnTo = getDirection();
+	if (getWorld()->shouldRunFromZombie(this, shouldTurnTo)) {
+		setDirection(shouldTurnTo);
+		int xBoi = getX();
+		int yBoi = getY();
+		switch (shouldTurnTo) {
+		case right:
+			xBoi += 2;
+			break;
+		case left:
+			xBoi -= 2;
+			break;
+		case up:
+			yBoi += 2;
+			break;
+		case down:
+			yBoi -= 2;
+			break;
+		default:
+			break;
+		}
+		if (getWorld()->personMoveFreely(this, xBoi, yBoi)) {
+			moveTo(xBoi, yBoi);
+		}
+	}
+
 }
 
 bool Citizen::canExit()

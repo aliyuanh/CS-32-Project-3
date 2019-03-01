@@ -32,6 +32,7 @@ public:
 	bool canVomitHere(int x, int y, Actor*p);
 	void vomitHere(int x, int y);
 	bool faceThisWay(Actor*p, Direction& dir);
+	bool shouldRunFromZombie(Actor*p, Direction&myDir);
 private:
 	//vector<Actor*> peeps;
 	Actor* penny;

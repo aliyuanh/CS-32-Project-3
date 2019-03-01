@@ -20,6 +20,7 @@ GameWorld* createStudentWorld(string assetPath)
 	return new StudentWorld(assetPath);
 }
 
+
 // Students:  Add code to this file, StudentWorld.h, Actor.h and Actor.cpp
 
 StudentWorld::~StudentWorld()
@@ -374,15 +375,17 @@ bool StudentWorld::checkObjectOverlap(Actor * p)
 	//if this returns true, kill p
 
 	for (list<Actor*>::iterator it = entities.begin(); it != entities.end(); it++) {
-		if ((*it)->canInfect()) {
-			p->infect();
-		}
+		
 		if ((*it) == p) {
 			continue;
 		}
 		int diffX = abs(p->getX() - (*it)->getX()) - 4;
 		int diffY = abs(p->getY() - (*it)->getY()) - 4;
 		if (diffX * diffX + diffY * diffY <= 144) {
+			if ((*it)->canInfect()) {
+				//cout << "infecting!" << endl;
+				p->infect();
+			}
 			if ((*it)->canKill()) {
 				p->die();
 				return true;
@@ -439,7 +442,7 @@ bool StudentWorld::personMoveFreely(Actor * p, int x, int y)
 
 
 		if (diffX * diffX + diffY * diffY < 256 && (diffX > 0 ||diffY >0)) {
-			if ((*it)->canBeInfected()) {
+			if ((*it)->canBeInfected() && p->canInfect()) {
 				(*it)->infect();
 			}
 			if ((*it)->canExplode()) {
@@ -672,6 +675,132 @@ bool StudentWorld::faceThisWay(Actor * p, Direction&dir)
 		return true;
 	}
 	return true;
+}
+
+bool StudentWorld::shouldRunFromZombie(Actor * p, Direction & myDir)
+{
+	int distAway = 1000000;
+	bool shouldRun = false;
+	for (list<Actor*>::iterator it = entities.begin(); it != entities.end(); it++) {
+		if ((*it) == p) {
+			continue;
+		}
+		int diffX = p->getX() - (*it)->getX();
+		int diffY = p->getY() - (*it)->getY();
+		if ((*it)->canVomit()) {
+			//these are the zombies! this gets the smallest distance. 
+			if (diffX * diffX + diffY * diffY < distAway && diffX * diffX + diffY * diffY < 80*80) {
+				distAway = diffX * diffX + diffY * diffY;
+				shouldRun = true;
+				if (diffX > 0) {//face right
+					if (abs(diffY) > abs(diffX)) {
+						//do horizontal stuff
+						if (diffY > 0) {
+							myDir = GraphObject::up;
+							if (!personMoveFreely(p, p->getX(), p->getY()+2)) {
+								if (diffX > 0) {
+									myDir = GraphObject::right;
+								}
+								else {
+									myDir = GraphObject::left;
+								}
+							}
+						}
+						else {
+							myDir = GraphObject::down;
+							if (!personMoveFreely(p, p->getX(), p->getY()-2)) {
+								if (diffX > 0) {
+									myDir = GraphObject::right;
+								}
+								else {
+									myDir = GraphObject::left;
+								}
+							}
+						}
+					}
+					else {
+						if (diffX > 0) {
+							myDir = GraphObject::right;
+							if (!personMoveFreely(p, p->getX()+2, p->getY())) {
+								if (diffY > 0) {
+									myDir = GraphObject::up;
+								}
+								else {
+									myDir = GraphObject::down;
+								}
+							}
+						}
+						else {
+							myDir = GraphObject::left;
+							if (!personMoveFreely(p, p->getX() - 2, p->getY())) {
+								if (diffY > 0) {
+									myDir = GraphObject::up;
+								}
+								else {
+									myDir = GraphObject::down;
+								}
+							}
+						}
+					}
+				}
+				else { //face left 
+					if (abs(diffY)>abs(diffX)) {
+						if (diffY > 0) {
+							myDir = GraphObject::up;
+							if (!personMoveFreely(p, p->getX(), p->getY()+2)) {
+								if (diffX > 0) {
+									myDir = GraphObject::right;
+								}
+								else {
+									myDir = GraphObject::left;
+								}
+							}
+						}
+						else {
+							myDir = GraphObject::down;
+							if (!personMoveFreely(p, p->getX(), p->getY()-2)) {
+								if (diffX > 0) {
+									myDir = GraphObject::right;
+								}
+								else {
+									myDir = GraphObject::left;
+								}
+							}
+						}
+
+					}
+					else {
+						if (diffX > 0) {
+							myDir = GraphObject::right;
+							if (!personMoveFreely(p, p->getX() + 2, p->getY())) {
+								if (diffY > 0) {
+									myDir = GraphObject::up;
+								}
+								else {
+									myDir = GraphObject::down;
+								}
+							}
+						}
+						else {
+							myDir = GraphObject::left;
+							if (!personMoveFreely(p, p->getX() - 2, p->getY())) {
+								if (diffY > 0) {
+									myDir = GraphObject::up;
+								}
+								else {
+									myDir = GraphObject::down;
+								}
+							}
+						}
+						//horizontal 
+					}
+				}
+
+			}
+		}
+	}
+	//cout << distAway << endl;
+	return shouldRun;
 }
 
 bool StudentWorld::checkCollision(int x, int y) {
